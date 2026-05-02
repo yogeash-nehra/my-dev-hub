@@ -159,10 +159,11 @@ Configured in `.claude/settings.json`:
 ## Quick-Start Commands
 
 ```bash
-# Start a dev session in context
-cd C:\Dev\Yogi\dev && claude
+# Start a hub session (root)
+cd C:\Dev\Yogi && claude
 
-# Start an ops session
+# Start a domain session
+cd C:\Dev\Yogi\dev && claude
 cd C:\Dev\Yogi\ops && claude
 
 # Run the daily brief workflow
@@ -171,4 +172,7 @@ cd C:\Dev\Yogi\ops && claude
 
 # Scaffold a new project
 # > Read workflows/new-project.md, then follow the steps for project: {{NAME}}
+
+# Run the frontend locally
+cd C:\Dev\Yogi && npm install && npm run dev  # → localhost:3000
 ```

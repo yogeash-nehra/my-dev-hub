@@ -9,7 +9,8 @@ ops/invoices/
 dev/reviews/
 
 # Frontend
-web/node_modules/
-web/.next/
-web/.env
-web/.env.local
+node_modules/
+.next/
+.env
+.env.local
+next-env.d.ts
