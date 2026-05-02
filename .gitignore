@@ -1,0 +1,15 @@
+.claude/audit.log
+personal/briefs/
+personal/digests/
+personal/research/
+ops/drafts/
+ops/sent/
+ops/archive/
+ops/invoices/
+dev/reviews/
+
+# Frontend
+web/node_modules/
+web/.next/
+web/.env
+web/.env.local

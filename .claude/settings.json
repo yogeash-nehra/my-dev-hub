@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "WebSearch(*)",
+      "WebFetch(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[$(date -u +%Y-%m-%dT%H:%M:%SZ)] BASH: $CLAUDE_TOOL_INPUT_COMMAND\" >> \"C:/Dev/Yogi/.claude/audit.log\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"\n=== Session ended $(date) ===\nReminder: Update memory files if you learned something worth keeping.\nPath: C:/Users/yogeash.nehra/.claude/projects/C--Dev-Yogi/memory/\n\""
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "YOGI_HUB": "C:/Dev/Yogi",
+    "YOGI_MEMORY": "C:/Users/yogeash.nehra/.claude/projects/C--Dev-Yogi/memory",
+    "ANTHROPIC_MODEL": "claude-sonnet-4-6",
+    "ANTHROPIC_SMALL_FAST_MODEL": "claude-haiku-4-5-20251001"
+  }
+}
