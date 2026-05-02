@@ -89,14 +89,16 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: 'Invalid request body.' }), { status: 400 })
   }
 
-  const { prompt, role } = body
-  if (!prompt?.trim() || !role) {
-    return new Response(JSON.stringify({ error: 'prompt and role are required.' }), { status: 400 })
+  const { prompt, role, systemPrompt: customSystemPrompt } = body as {
+    prompt?: string; role?: string; systemPrompt?: string
+  }
+  if (!prompt?.trim()) {
+    return new Response(JSON.stringify({ error: 'prompt is required.' }), { status: 400 })
   }
 
-  const systemPrompt = systemPrompts[role]
+  const systemPrompt = customSystemPrompt ?? (role ? systemPrompts[role] : undefined)
   if (!systemPrompt) {
-    return new Response(JSON.stringify({ error: 'Unknown role.' }), { status: 400 })
+    return new Response(JSON.stringify({ error: 'Unknown role and no systemPrompt provided.' }), { status: 400 })
   }
 
   const encoder = new TextEncoder()

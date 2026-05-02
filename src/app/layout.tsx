@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import Link from 'next/link'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
@@ -19,6 +20,54 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <nav
+          style={{
+            height: 48,
+            background: 'rgba(8,13,20,0.95)',
+            borderBottom: '1px solid rgba(255,255,255,0.07)',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 24px',
+            gap: 24,
+            position: 'sticky',
+            top: 0,
+            zIndex: 100,
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          <Link
+            href="/"
+            style={{
+              fontSize: 14,
+              fontWeight: 700,
+              color: '#F1F5F9',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+            }}
+          >
+            <span style={{ fontSize: 16 }}>⚡</span>
+            Dev Hub
+          </Link>
+          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.08)' }} />
+          <Link
+            href="/flow"
+            style={{
+              fontSize: 13,
+              color: '#64748B',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              transition: 'color 0.15s',
+            }}
+            onMouseEnter={undefined}
+          >
+            <span style={{ fontSize: 14 }}>◈</span>
+            Flow Builder
+          </Link>
+        </nav>
         {children}
       </body>
     </html>
