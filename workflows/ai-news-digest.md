@@ -36,6 +36,7 @@ Sources to check: Anthropic, OpenAI, Google DeepMind/AI, Meta AI, Mistral, Coher
 For each, use WebSearch with site: operators and date filters.
 Fetch and quality-gate every candidate.
 Return: entries that scored ≥3 on the quality gate, with score shown.
+Include any strong Trends items scored ≥2.
 ```
 
 **Agent B — GitHub releases scan:**
@@ -56,9 +57,11 @@ Scan for:
 1. arXiv new submissions (cs.AI, cs.CL, cs.LG) from {{SCAN_PERIOD}} — filter to papers with code or strong benchmarks
 2. Simon Willison (simonwillison.net) recent posts
 3. Hacker News: search for AI-related Show HN / technical threads with score >200
+4. Trending developer discussions on patterns or techniques gaining traction
 
-For community sources: apply the exclusion list from personal/sources/ai-dev-sources.md strictly.
-Return: only items that scored ≥3.
+For community sources: apply the exclusion list from personal/sources/ai-dev-sources.md.
+Quality gate: ≥3 for Research/Discussions, ≥2 acceptable for Trends items.
+Return: all items that passed, clearly labeled by section.
 ```
 
 #### Step 3: Consolidate and rank (sequential, after all agents)
@@ -67,12 +70,15 @@ Merge the outputs from all three scan agents.
 Remove any duplicates (same story from multiple sources — keep the primary source entry).
 Sort each category by: developer impact (highest first), then recency.
 Produce the final digest using the format from agents/ai-news-agent.md.
-Include total items found vs. excluded at the top.
+Include total items found vs. excluded and near-miss names at the top.
 ```
 
 ### Outputs
 Formatted digest in conversation.
-Optionally save: `personal/digests/ai-{{DATE}}.md`
+Save: `personal/digests/ai-{{DATE}}.md`
+
+The digest is automatically readable on the website at `/digest/{{DATE}}`.
+No extra steps needed — the website reads directly from `personal/digests/`.
 
 ### Example Invocation
 ```
@@ -119,7 +125,7 @@ For changelogs: read every entry completely.
 For blog posts: read the full article, not a skim.
 
 Take notes on: specific claims made, numbers cited, code examples shown,
-limitations acknowledged, and gaps not addressed.
+limitations acknowledged, comparisons made, and gaps not addressed.
 ```
 
 #### Step 3: Synthesize with extended thinking (sequential)
@@ -130,7 +136,8 @@ Output use: {{OUTPUT_USE}}
 
 Think carefully (use extended thinking, budget: 10000 tokens) before writing.
 Consider: what is definitively true vs. what is implied, what is missing,
-what contradictions exist across sources, what a developer should actually do.
+what contradictions exist across sources, what a developer should actually do,
+and how this compares to alternatives.
 
 Write a deep research report using the format in agents/ai-news-agent.md (deep research format).
 Include every primary source in the sources section.
@@ -140,14 +147,6 @@ Be honest about gaps and unknowns — don't fill them with speculation.
 ### Outputs
 Deep research report in conversation.
 Save: `personal/research/{{TOPIC-SLUG}}-{{DATE}}.md`
-
-### Example Invocation
-```
-Read workflows/ai-news-digest.md, then run Mode 2 Deep Research.
-Topic: vLLM 0.4 speculative decoding
-Angle: how to use it and what the real-world speedup looks like
-Output use: decide whether to replace my current inference setup
-```
 
 ---
 
@@ -170,3 +169,13 @@ Run workflows/ai-news-digest.md Mode 1 every Monday.
 Period: last 7 days. Depth: standard digest.
 Save output to personal/digests/ai-weekly-{{DATE}}.md.
 ```
+
+---
+
+## Reading Digests on the Website
+
+All saved digests appear automatically at `/digest` on the Dev Hub website.
+Each digest at `personal/digests/ai-{{DATE}}.md` is readable at `/digest/{{DATE}}`.
+
+The website renders full markdown with syntax highlighting, section headers,
+and styled TL;DR / Developer signal blocks.
