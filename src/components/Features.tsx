@@ -49,10 +49,10 @@ export function Features() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-medium text-purple-400 tracking-widest uppercase mb-3">Under the hood</p>
-          <h2 className="text-4xl font-bold text-slate-50">Powered by specialized agents</h2>
+          <h2 className="text-4xl font-bold text-slate-50">Six purpose-built agents</h2>
           <p className="mt-4 text-slate-400 max-w-xl mx-auto">
-            Each agent is purpose-built with its own system prompt, tools, and output standards.
-            They collaborate — you get finished work.
+            Every agent has its own system prompt, tool access, and output standard.
+            Mix and match — the hub orchestrates them so you don't have to.
           </p>
         </div>
 

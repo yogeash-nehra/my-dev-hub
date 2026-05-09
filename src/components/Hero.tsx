@@ -69,8 +69,8 @@ export function Hero() {
             transition: 'opacity 0.25s ease, transform 0.25s ease',
             opacity: visible ? 1 : 0,
             transform: visible ? 'translateY(0)' : 'translateY(-8px)',
-            minWidth: '12ch',
-            textAlign: 'left',
+            minWidth: '14ch',
+            textAlign: 'center',
           }}
         >
           {roles[index]}.
@@ -79,8 +79,8 @@ export function Hero() {
 
       {/* Sub copy */}
       <p className="relative mt-4 text-center text-slate-500 max-w-xl leading-relaxed" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}>
-        Not another chatbot. A team of specialized AI agents that produces real, finished
-        outputs — proposals, code reviews, test plans, research reports — in seconds.
+        Skip the back-and-forth. Describe what you need — code review, test plan, proposal,
+        research brief — and specialized agents deliver a finished output in seconds.
       </p>
 
       {/* CTAs */}
@@ -108,9 +108,15 @@ export function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-10 flex flex-col items-center gap-2 text-slate-600 text-xs">
-        <span>scroll to explore</span>
-        <div className="w-px h-10 bg-gradient-to-b from-slate-600 to-transparent" />
+      <div className="absolute bottom-10 flex flex-col items-center gap-1.5 text-slate-500 text-xs">
+        <span className="tracking-widest uppercase" style={{ fontSize: '0.65rem', letterSpacing: '0.12em' }}>scroll to explore</span>
+        <svg
+          className="animate-bounce"
+          width="16" height="16" viewBox="0 0 16 16" fill="none"
+          style={{ color: 'rgba(148,163,184,0.6)' }}
+        >
+          <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </div>
     </section>
   )
