@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -12,6 +12,8 @@ const roles = [
     emoji: '⚡',
     label: 'Developer',
     tagline: 'Ship faster. Break less.',
+    situation: 'You just got PRs to review before standup.',
+    agentLabel: 'Dev Agent',
     color: '#3B82F6',
     examples: [
       'Review this code for bugs, edge cases, and security issues:\n\n```js\nasync function getUser(id) {\n  const user = await db.query(`SELECT * FROM users WHERE id = ${id}`)\n  return user.rows[0]\n}\n```',
@@ -25,6 +27,8 @@ const roles = [
     emoji: '🏗️',
     label: 'Architect',
     tagline: 'Design systems that scale.',
+    situation: 'Tech stack decision due by end of day.',
+    agentLabel: 'Architect Agent',
     color: '#8B5CF6',
     examples: [
       'Compare PostgreSQL vs MongoDB vs DynamoDB for a multi-tenant SaaS app with 500k users. Give a direct recommendation.',
@@ -38,6 +42,8 @@ const roles = [
     emoji: '🚀',
     label: 'Entrepreneur',
     tagline: 'Move fast. Think clearly.',
+    situation: 'New enterprise prospect asked for a proposal.',
+    agentLabel: 'Ops Agent',
     color: '#F59E0B',
     examples: [
       'Write a one-page business proposal for an AI-powered scheduling tool for healthcare clinics',
@@ -51,6 +57,8 @@ const roles = [
     emoji: '📊',
     label: 'Business Analyst',
     tagline: 'Turn requirements into clarity.',
+    situation: 'Requirements meeting transcript just dropped.',
+    agentLabel: 'BA Agent',
     color: '#10B981',
     examples: [
       'Write user stories and acceptance criteria for a two-factor authentication feature on a mobile banking app',
@@ -64,6 +72,8 @@ const roles = [
     emoji: '🔍',
     label: 'QA Engineer',
     tagline: 'Find it before they do.',
+    situation: 'Integration ships Friday. Test plan needed now.',
+    agentLabel: 'QA Agent',
     color: '#EF4444',
     examples: [
       'Generate a complete test plan for a Stripe payment integration — happy path, failures, webhooks, and edge cases',
@@ -77,6 +87,8 @@ const roles = [
     emoji: '🛠️',
     label: 'IT Support',
     tagline: 'Fix it fast. Document it right.',
+    situation: 'Production issue just came in. Runbook needed.',
+    agentLabel: 'IT Support Agent',
     color: '#06B6D4',
     examples: [
       'Write a troubleshooting runbook for users unable to connect to VPN — Windows and Mac coverage',
@@ -90,6 +102,8 @@ const roles = [
     emoji: '📱',
     label: 'Social Media',
     tagline: 'Create content that lands.',
+    situation: 'Product launch is Monday. Content needed now.',
+    agentLabel: 'Content Agent',
     color: '#EC4899',
     examples: [
       'Write 3 LinkedIn posts about how AI is changing developer workflows — insight-led, not hype',
@@ -135,16 +149,29 @@ export function RoleDemo() {
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
   const [activeExample, setActiveExample] = useState<number | null>(null)
+  const [elapsed, setElapsed] = useState<number | null>(null)
   const outputRef = useRef<HTMLDivElement>(null)
+  const startTimeRef = useRef<number>(0)
 
-  const selectRole = (role: typeof roles[0]) => {
+  const selectRole = useCallback((role: typeof roles[0]) => {
     setSelectedRole(role)
     setPrompt('')
     setOutput('')
     setDone(false)
     setError('')
     setActiveExample(null)
-  }
+    setElapsed(null)
+  }, [])
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { roleId } = (e as CustomEvent).detail
+      const role = roles.find(r => r.id === roleId)
+      if (role) selectRole(role)
+    }
+    window.addEventListener('devhub:selectRole', handler)
+    return () => window.removeEventListener('devhub:selectRole', handler)
+  }, [selectRole])
 
   const pickExample = (example: string, i: number) => {
     setPrompt(example)
@@ -160,6 +187,8 @@ export function RoleDemo() {
     setOutput('')
     setDone(false)
     setError('')
+    setElapsed(null)
+    startTimeRef.current = Date.now()
 
     try {
       const res = await fetch('/api/generate', {
@@ -185,6 +214,7 @@ export function RoleDemo() {
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong.')
     } finally {
+      setElapsed(Math.round((Date.now() - startTimeRef.current) / 100) / 10)
       setStreaming(false)
       setDone(true)
     }
@@ -196,6 +226,7 @@ export function RoleDemo() {
     setDone(false)
     setError('')
     setActiveExample(null)
+    setElapsed(null)
   }
 
   return (
@@ -235,10 +266,16 @@ export function RoleDemo() {
           })}
         </div>
 
-        {/* Tagline */}
-        <div className="mb-6 flex items-center gap-2">
-          <span className="text-lg">{selectedRole.emoji}</span>
-          <span className="font-semibold" style={{ color: selectedRole.color }}>{selectedRole.tagline}</span>
+        {/* Tagline + situation */}
+        <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">{selectedRole.emoji}</span>
+            <span className="font-semibold" style={{ color: selectedRole.color }}>{selectedRole.tagline}</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-slate-500 border border-white/8 rounded-full px-3 py-1">
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: selectedRole.color }} />
+            {selectedRole.situation}
+          </div>
         </div>
 
         {/* Example prompts */}
@@ -317,8 +354,13 @@ export function RoleDemo() {
             <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/6">
               <div className="flex items-center gap-2 text-xs text-slate-500">
                 <span>{selectedRole.emoji}</span>
-                <span>{selectedRole.label} output</span>
+                <span>{selectedRole.agentLabel}</span>
+                <span style={{ color: 'rgba(255,255,255,0.15)' }}>·</span>
+                <span>claude-sonnet-4-6</span>
                 {streaming && <LoadingDots />}
+                {done && elapsed !== null && (
+                  <span className="text-slate-600">{elapsed}s</span>
+                )}
               </div>
               {done && output && <CopyButton text={output} />}
             </div>
