@@ -53,6 +53,10 @@ These repos ship fast — releases often contain real news before blog posts app
 | huggingface/diffusers | Image/video generation models, LoRA updates |
 | pytorch/pytorch | Core ML framework releases |
 | modal-labs/modal | GPU cloud deployment, serverless AI |
+| microsoft/autogen | Multi-agent framework releases, new agent patterns |
+| crewai-inc/crewAI | Agentic workflow releases, new tool integrations |
+| huggingface/smolagents | Lightweight agent framework releases, new model support |
+| agno-agi/agno | Agentic framework releases, memory/tooling additions |
 
 ### arXiv (cs.AI, cs.CL, cs.LG, cs.CV — new submissions daily)
 Filter for papers that:

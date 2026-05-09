@@ -302,3 +302,40 @@ Deep research output format:
 - Developer signal should tell a developer what to *do*, not just what happened
 - Never fill the "Research" section with papers that don't have code or concrete benchmark numbers
 - "Affects you if" must be a real conditional — not "you're interested in AI" but a specific technical condition
+
+---
+
+## Pre-Save Verification Checklist
+
+Run through this before writing the digest file. If anything is missing, add it now.
+
+**Header line:**
+- [ ] `*N items passed quality gate | TOTAL scanned | EXCLUDED excluded | Sources checked: N*`
+
+**Required sections — use these exact names, no renaming:**
+- [ ] `## This Week's Signal` with **Must-reads** block beneath it
+- [ ] `## [BREAKING] Breaking Changes` — write "No breaking changes this period." if none
+- [ ] `## Model Releases`
+- [ ] `## API & SDK Changes`
+- [ ] `## Research`
+- [ ] `## Tooling`
+- [ ] `## Benchmarks & Leaderboards`
+- [ ] `## Trends & Emerging Tech`
+- [ ] `## Technical Discussions`
+- [ ] `## Quick Hits`
+- [ ] `## Worth Watching` — omit only if nothing is officially announced-but-not-shipped
+- [ ] `<details><summary>🔭 Horizon ...` block with 2–5 entries
+
+**Every main-section entry must include all of these fields:**
+- [ ] Impact tier in heading: `### [BREAKING]`, `### [HIGH]`, `### [MEDIUM]`, or `### [NOTABLE]`
+- [ ] `**What changed:**` — the delta only (what's new vs. what existed before)
+- [ ] `**TL;DR:**` — one sentence with at least one concrete number when available
+- [ ] `**Developer signal:**` — what to *do*, not just what happened (3–6 sentences)
+- [ ] `**Affects you if:**` — a specific technical condition, not "you're interested in AI"
+- [ ] `**Adoption effort:**` — Quick / Moderate / Significant
+- [ ] `**Primary source:**` link
+- [ ] `*Quality gate score: N (breakdown)*`
+
+**Footer:**
+- [ ] `*Excluded: N items below quality gate threshold.*`
+- [ ] `*Near-misses: ...*`
