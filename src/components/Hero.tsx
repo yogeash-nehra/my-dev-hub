@@ -28,7 +28,7 @@ export function Hero() {
   }, [])
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 grid-bg overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pb-28 grid-bg overflow-hidden">
       {/* Glow blobs */}
       <div
         className="hero-glow absolute pointer-events-none"
