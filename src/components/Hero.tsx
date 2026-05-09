@@ -69,6 +69,8 @@ export function Hero() {
             transition: 'opacity 0.25s ease, transform 0.25s ease',
             opacity: visible ? 1 : 0,
             transform: visible ? 'translateY(0)' : 'translateY(-8px)',
+            minWidth: '12ch',
+            textAlign: 'left',
           }}
         >
           {roles[index]}.
