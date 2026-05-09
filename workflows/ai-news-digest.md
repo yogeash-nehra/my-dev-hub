@@ -64,6 +64,11 @@ Priority repos (check every scan):
 - NVIDIA/TensorRT-LLM
 - anthropics/anthropic-sdk-python
 - openai/openai-python
+- run-llama/llama_index
+- microsoft/autogen
+- crewai-inc/crewAI
+- huggingface/smolagents
+- agno-agi/agno
 
 For each repo: check the releases page, fetch release notes for anything in {{SCAN_PERIOD}}.
 Skip pure patch versions (x.y.Z) unless they fix a meaningful bug or add minor functionality.
@@ -124,6 +129,7 @@ Scan for AI infrastructure and platform updates from {{SCAN_PERIOD}}:
 4. Together AI Blog (together.ai/blog) — open model hosting, fine-tuning updates
 5. NVIDIA Developer Blog — TensorRT-LLM, CUDA, inference optimization
 6. Modal Blog (modal.com/blog) — GPU cloud, deployment updates
+7. Fireworks AI Blog (fireworks.ai/blog) — inference optimization, model serving updates
 
 Filter aggressively: only changes that affect how you run, deploy, or cost-optimize AI workloads.
 Skip anything that's a restatement of a model announcement already covered by Agent A.

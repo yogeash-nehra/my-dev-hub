@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Skill(schedule)"
+      "Skill(schedule)",
+      "PowerShell(Get-ChildItem \"C:\\\\Dev\\\\Yogi\" | Where-Object { $_.Name -ne 'node_modules' } | Select-Object Name, LastWriteTime)"
     ]
   }
 }
