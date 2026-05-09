@@ -25,9 +25,9 @@ export function HowItWorks() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-medium text-blue-400 tracking-widest uppercase mb-3">How it works</p>
-          <h2 className="text-4xl font-bold text-slate-50">Three steps. Real output.</h2>
+          <h2 className="text-4xl font-bold text-slate-50">Three steps to a finished output.</h2>
           <p className="mt-4 text-slate-400 max-w-lg mx-auto">
-            No prompting required. No back-and-forth. Just pick your role and task.
+            No prompt engineering. No chain of thought wrangling. Pick your role, describe the task, get the deliverable.
           </p>
         </div>
 
