@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   ReactFlow,
   Background,
@@ -16,12 +16,12 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 
-import { InputNode, type InputNodeType } from './nodes/InputNode'
-import { SkillNode, type SkillNodeType } from './nodes/SkillNode'
+import { InputNode, type InputNodeData, type InputNodeType } from './nodes/InputNode'
+import { SkillNode, type SkillNodeData, type SkillNodeType } from './nodes/SkillNode'
 import { OutputNode, type OutputNodeType } from './nodes/OutputNode'
 import { SkillPalette } from './SkillPalette'
 import { GenerateSkillDialog } from './GenerateSkillDialog'
-import { BUILT_IN_SKILLS, type Skill } from './skills'
+import { BUILT_IN_SKILLS, FLOW_TEMPLATES, type Skill, type FlowTemplate } from './skills'
 
 type FlowNode = InputNodeType | SkillNodeType | OutputNodeType
 
@@ -31,7 +31,7 @@ const nodeTypes = {
   'output-node': OutputNode,
 }
 
-const initialNodes: FlowNode[] = [
+const DEFAULT_NODES: FlowNode[] = [
   {
     id: 'input-1',
     type: 'input-node',
@@ -57,12 +57,8 @@ function topologicalSort(nodeIds: string[], edges: Edge[]): string[] {
     adjList.set(id, [])
   }
   for (const e of edges) {
-    if (inDegree.has(e.target)) {
-      inDegree.set(e.target, (inDegree.get(e.target) ?? 0) + 1)
-    }
-    if (adjList.has(e.source)) {
-      adjList.get(e.source)!.push(e.target)
-    }
+    if (inDegree.has(e.target)) inDegree.set(e.target, (inDegree.get(e.target) ?? 0) + 1)
+    if (adjList.has(e.source)) adjList.get(e.source)!.push(e.target)
   }
 
   const queue = nodeIds.filter(id => inDegree.get(id) === 0)
@@ -79,19 +75,69 @@ function topologicalSort(nodeIds: string[], edges: Edge[]): string[] {
   return sorted
 }
 
+function serializeNodes(nodes: FlowNode[]) {
+  return nodes.map(n => {
+    if (n.type === 'input-node') {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { onChange, ...rest } = n.data as InputNodeData
+      return { ...n, data: rest }
+    }
+    if (n.type === 'skill-node') {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { onDelete, onInstructionChange, ...rest } = n.data as SkillNodeData
+      return { ...n, data: rest }
+    }
+    return n
+  })
+}
+
 export function FlowBuilder() {
-  const [nodes, setNodes, onNodesChange] = useNodesState<FlowNode>(initialNodes)
+  const [nodes, setNodes, onNodesChange] = useNodesState<FlowNode>(DEFAULT_NODES)
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
   const [skills, setSkills] = useState<Skill[]>(BUILT_IN_SKILLS)
   const [showGenDialog, setShowGenDialog] = useState(false)
   const [running, setRunning] = useState(false)
+  const [runError, setRunError] = useState('')
   const rfInstance = useRef<ReactFlowInstance<FlowNode, Edge> | null>(null)
-
-  // Keep inputText in a ref so the node callback always has latest value
   const inputTextRef = useRef('')
 
+  // Load custom skills + saved flow on mount
+  useEffect(() => {
+    try {
+      const customSkills: Skill[] = JSON.parse(localStorage.getItem('custom-skills') ?? '[]')
+      if (customSkills.length) setSkills([...BUILT_IN_SKILLS, ...customSkills])
+
+      const savedNodes = localStorage.getItem('flow-nodes')
+      const savedEdges = localStorage.getItem('flow-edges')
+
+      if (savedNodes) {
+        const loaded: FlowNode[] = JSON.parse(savedNodes).map((n: FlowNode) => {
+          if (n.type === 'input-node') return { ...n, data: { ...n.data, onChange: () => {} } }
+          return n
+        })
+        setNodes(loaded)
+        const inputNode = loaded.find(n => n.type === 'input-node') as InputNodeType | undefined
+        if (inputNode) inputTextRef.current = inputNode.data.inputText ?? ''
+      }
+      if (savedEdges) setEdges(JSON.parse(savedEdges))
+    } catch {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Auto-save flow (debounced 600ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        localStorage.setItem('flow-nodes', JSON.stringify(serializeNodes(nodes)))
+        localStorage.setItem('flow-edges', JSON.stringify(edges))
+      } catch {}
+    }, 600)
+    return () => clearTimeout(timer)
+  }, [nodes, edges])
+
   const onConnect = useCallback(
-    (params: Connection) => setEdges(eds => addEdge({ ...params, animated: true, style: { stroke: '#7C3AED', strokeWidth: 2 } }, eds)),
+    (params: Connection) =>
+      setEdges(eds => addEdge({ ...params, animated: true, style: { stroke: '#7C3AED', strokeWidth: 2 } }, eds)),
     [setEdges]
   )
 
@@ -109,7 +155,6 @@ export function FlowBuilder() {
     const raw = e.dataTransfer.getData('application/skill')
     if (!raw || !rfInstance.current) return
     const skill = JSON.parse(raw) as Skill
-
     const position = rfInstance.current.screenToFlowPosition({ x: e.clientX, y: e.clientY })
 
     const newNode: SkillNodeType = {
@@ -123,6 +168,7 @@ export function FlowBuilder() {
         color: skill.color,
         output: '',
         status: 'idle',
+        instruction: '',
       },
     }
     setNodes(nds => [...nds, newNode])
@@ -134,11 +180,83 @@ export function FlowBuilder() {
     )
   }
 
+  const loadTemplate = (template: FlowTemplate) => {
+    const templateSkills = template.skillIds
+      .map(id => skills.find(s => s.id === id))
+      .filter(Boolean) as Skill[]
+
+    const newNodes: FlowNode[] = [
+      {
+        id: 'input-1',
+        type: 'input-node',
+        position: { x: 200, y: 60 },
+        data: { inputText: '', onChange: () => {} },
+      },
+    ]
+
+    const skillNodeIds: string[] = []
+    templateSkills.forEach((skill, i) => {
+      const id = `skill-${++nodeIdCounter}`
+      skillNodeIds.push(id)
+      newNodes.push({
+        id,
+        type: 'skill-node',
+        position: { x: 200, y: 60 + 240 * (i + 1) },
+        data: {
+          skillId: skill.id,
+          name: skill.name,
+          emoji: skill.emoji,
+          color: skill.color,
+          output: '',
+          status: 'idle',
+          instruction: '',
+        },
+      })
+    })
+
+    newNodes.push({
+      id: 'output-1',
+      type: 'output-node',
+      position: { x: 180, y: 60 + 240 * (templateSkills.length + 1) },
+      data: { result: '' },
+    })
+
+    const allIds = ['input-1', ...skillNodeIds, 'output-1']
+    const newEdges: Edge[] = allIds.slice(0, -1).map((id, i) => ({
+      id: `e-${id}-${allIds[i + 1]}`,
+      source: id,
+      target: allIds[i + 1],
+      animated: true,
+      style: { stroke: '#7C3AED', strokeWidth: 2 },
+    }))
+
+    inputTextRef.current = ''
+    setNodes(newNodes)
+    setEdges(newEdges)
+    setRunError('')
+
+    // Fit view after state settles
+    setTimeout(() => rfInstance.current?.fitView({ padding: 0.15 }), 50)
+  }
+
   const run = async () => {
     if (running) return
+
+    const inputText = inputTextRef.current
+    if (!inputText.trim()) {
+      setRunError('Add input text before running.')
+      return
+    }
+
+    const skillNodes = nodes.filter(n => n.type === 'skill-node') as SkillNodeType[]
+    if (skillNodes.length === 0) {
+      setRunError('Drag at least one skill onto the canvas.')
+      return
+    }
+
+    setRunError('')
     setRunning(true)
 
-    // Reset all nodes
     setNodes(nds =>
       nds.map(n => {
         if (n.type === 'skill-node') return { ...n, data: { ...n.data, output: '', status: 'idle' as const } }
@@ -147,20 +265,16 @@ export function FlowBuilder() {
       })
     )
 
-    const inputNode = nodes.find(n => n.type === 'input-node') as InputNodeType | undefined
     const outputNode = nodes.find(n => n.type === 'output-node') as OutputNodeType | undefined
-    const skillNodes = nodes.filter(n => n.type === 'skill-node') as SkillNodeType[]
-
+    const inputNode = nodes.find(n => n.type === 'input-node') as InputNodeType | undefined
     if (!inputNode || !outputNode) { setRunning(false); return }
 
-    const inputText = inputTextRef.current
-    if (!inputText.trim()) { setRunning(false); return }
-
-    // Build sorted execution order for skill nodes only
     const skillIds = skillNodes.map(n => n.id)
-    const sorted = topologicalSort(skillIds, edges.filter(e => skillIds.includes(e.source) && skillIds.includes(e.target)))
+    const sorted = topologicalSort(
+      skillIds,
+      edges.filter(e => skillIds.includes(e.source) && skillIds.includes(e.target))
+    )
 
-    // Map of node output (accumulated as skills run)
     const outputs = new Map<string, string>()
     outputs.set(inputNode.id, inputText)
 
@@ -168,14 +282,19 @@ export function FlowBuilder() {
       const skillNode = skillNodes.find(n => n.id === skillId)
       if (!skillNode) continue
 
-      // Find predecessor: edge coming into this skill node
       const incomingEdge = edges.find(e => e.target === skillId)
-      const predecessorOutput = incomingEdge ? (outputs.get(incomingEdge.source) ?? inputText) : inputText
+      const predecessorOutput = incomingEdge
+        ? (outputs.get(incomingEdge.source) ?? inputText)
+        : inputText
+
+      const promptText = skillNode.data.instruction?.trim()
+        ? `${predecessorOutput}\n\n---\nAdditional instruction: ${skillNode.data.instruction.trim()}`
+        : predecessorOutput
 
       updateNodeData(skillId, { status: 'running', output: '' })
 
       const skill = skills.find(s => s.id === skillNode.data.skillId)
-      const body: Record<string, string> = { prompt: predecessorOutput }
+      const body: Record<string, string> = { prompt: promptText }
       if (skill?.systemPrompt) {
         body.systemPrompt = skill.systemPrompt
       } else {
@@ -210,8 +329,6 @@ export function FlowBuilder() {
       }
     }
 
-    // Pipe final output to output node
-    // Find what connects to output node
     const incomingToOutput = edges.find(e => e.target === outputNode.id)
     const finalOutput = incomingToOutput
       ? (outputs.get(incomingToOutput.source) ?? '')
@@ -223,25 +340,27 @@ export function FlowBuilder() {
 
   const clearAll = () => {
     inputTextRef.current = ''
-    setNodes(initialNodes.map(n => {
+    setNodes(DEFAULT_NODES.map(n => {
       if (n.type === 'input-node') return { ...n, data: { ...n.data, inputText: '', onChange: () => {} } }
       return n
     }))
     setEdges([])
+    setRunError('')
+    localStorage.removeItem('flow-nodes')
+    localStorage.removeItem('flow-edges')
   }
 
   const onSkillCreated = (skill: Skill) => {
     const newSkill: Skill = { ...skill, id: `custom-${Date.now()}`, category: 'custom' }
     setSkills(prev => [...prev, newSkill])
-    // Persist to localStorage
     try {
       const stored = JSON.parse(localStorage.getItem('custom-skills') ?? '[]') as Skill[]
       localStorage.setItem('custom-skills', JSON.stringify([...stored, newSkill]))
     } catch {}
   }
 
-  // Wire up the input node onChange
-  const nodesWithCallbacks = nodes.map(n => {
+  // Inject callbacks into nodes (not persisted — re-injected each render)
+  const nodesWithCallbacks: FlowNode[] = nodes.map(n => {
     if (n.type === 'input-node') {
       return {
         ...n,
@@ -254,12 +373,26 @@ export function FlowBuilder() {
         },
       }
     }
+    if (n.type === 'skill-node') {
+      return {
+        ...n,
+        data: {
+          ...n.data,
+          onDelete: () => setNodes(nds => nds.filter(node => node.id !== n.id)),
+          onInstructionChange: (instruction: string) => updateNodeData(n.id, { instruction }),
+        },
+      }
+    }
     return n
   })
 
   return (
     <div style={{ display: 'flex', height: '100%', background: '#030712' }}>
-      <SkillPalette skills={skills} onGenerateClick={() => setShowGenDialog(true)} />
+      <SkillPalette
+        skills={skills}
+        onGenerateClick={() => setShowGenDialog(true)}
+        onLoadTemplate={loadTemplate}
+      />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Top bar */}
@@ -275,9 +408,15 @@ export function FlowBuilder() {
             flexShrink: 0,
           }}
         >
-          <span style={{ fontSize: 13, color: '#475569', flex: 1 }}>
-            Drag skills from the palette → connect nodes → Run ▶
-          </span>
+          {runError ? (
+            <span style={{ fontSize: 12, color: '#FCA5A5', flex: 1 }}>
+              ⚠ {runError}
+            </span>
+          ) : (
+            <span style={{ fontSize: 13, color: '#475569', flex: 1 }}>
+              Drag skills or load a template → connect nodes → Run ▶
+            </span>
+          )}
           <button
             onClick={clearAll}
             style={{
@@ -344,6 +483,7 @@ export function FlowBuilder() {
             onInit={onInit}
             nodeTypes={nodeTypes}
             fitView
+            deleteKeyCode="Delete"
             style={{ background: '#030712' }}
             defaultEdgeOptions={{
               animated: true,

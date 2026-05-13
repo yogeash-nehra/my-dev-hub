@@ -1,6 +1,7 @@
 'use client'
 
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react'
+import { useState } from 'react'
 
 export type SkillNodeStatus = 'idle' | 'running' | 'done' | 'error'
 
@@ -11,12 +12,16 @@ export type SkillNodeData = {
   color: string
   output: string
   status: SkillNodeStatus
+  instruction: string
+  onDelete?: () => void
+  onInstructionChange?: (value: string) => void
 }
 
 export type SkillNodeType = Node<SkillNodeData, 'skill-node'>
 
 export function SkillNode({ data }: NodeProps<SkillNodeType>) {
-  const { name, emoji, color, output, status } = data
+  const { name, emoji, color, output, status, instruction } = data
+  const [expanded, setExpanded] = useState(false)
 
   const statusColor =
     status === 'running' ? '#F59E0B'
@@ -51,7 +56,7 @@ export function SkillNode({ data }: NodeProps<SkillNodeType>) {
       {/* Header */}
       <div
         style={{
-          padding: '10px 14px',
+          padding: '10px 10px 10px 14px',
           borderBottom: '1px solid rgba(255,255,255,0.08)',
           display: 'flex',
           alignItems: 'center',
@@ -61,10 +66,9 @@ export function SkillNode({ data }: NodeProps<SkillNodeType>) {
         }}
       >
         <span style={{ fontSize: 16 }}>{emoji}</span>
-        <span style={{ fontSize: 13, fontWeight: 600, color: '#F1F5F9' }}>{name}</span>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#F1F5F9', flex: 1 }}>{name}</span>
         <span
           style={{
-            marginLeft: 'auto',
             fontSize: 10,
             color: statusColor,
             fontFamily: 'var(--font-geist-mono)',
@@ -87,15 +91,37 @@ export function SkillNode({ data }: NodeProps<SkillNodeType>) {
           )}
           {statusLabel}
         </span>
+        <button
+          onClick={() => data.onDelete?.()}
+          className="nodrag"
+          title="Delete node (or select + Delete key)"
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#475569',
+            cursor: 'pointer',
+            fontSize: 16,
+            lineHeight: 1,
+            padding: '0 2px',
+            marginLeft: 4,
+            borderRadius: 4,
+            transition: 'color 0.15s',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#EF4444' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#475569' }}
+        >
+          ×
+        </button>
       </div>
 
       {/* Output body */}
       <div
         style={{
           padding: '10px 12px',
-          maxHeight: 200,
-          minHeight: 60,
+          maxHeight: expanded ? 480 : 160,
+          minHeight: 52,
           overflowY: 'auto',
+          transition: 'max-height 0.2s ease',
         }}
       >
         {output ? (
@@ -127,9 +153,60 @@ export function SkillNode({ data }: NodeProps<SkillNodeType>) {
           </pre>
         ) : (
           <p style={{ fontSize: 11, color: '#334155', margin: 0 }}>
-            {status === 'running' ? 'Generating…' : 'Output will appear here when run.'}
+            {status === 'running' ? 'Generating…' : 'Output appears here when run.'}
           </p>
         )}
+      </div>
+
+      {/* Expand toggle */}
+      {output && (
+        <button
+          onClick={() => setExpanded(e => !e)}
+          className="nodrag"
+          style={{
+            display: 'block',
+            width: '100%',
+            background: 'none',
+            border: 'none',
+            borderTop: '1px solid rgba(255,255,255,0.05)',
+            color: '#334155',
+            fontSize: 10,
+            cursor: 'pointer',
+            padding: '4px 0',
+            textAlign: 'center',
+            fontFamily: 'var(--font-geist-mono)',
+            transition: 'color 0.15s',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#64748B' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#334155' }}
+        >
+          {expanded ? '▲ collapse' : '▼ expand'}
+        </button>
+      )}
+
+      {/* Instruction field */}
+      <div style={{ padding: '6px 10px 8px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <input
+          className="nodrag"
+          value={instruction || ''}
+          onChange={e => data.onInstructionChange?.(e.target.value)}
+          placeholder="Additional instruction…"
+          style={{
+            width: '100%',
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: 6,
+            color: '#94A3B8',
+            fontSize: 11,
+            padding: '4px 8px',
+            outline: 'none',
+            fontFamily: 'var(--font-geist-mono)',
+            boxSizing: 'border-box',
+            transition: 'border-color 0.15s',
+          }}
+          onFocus={e => { e.target.style.borderColor = `${color}60` }}
+          onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.07)' }}
+        />
       </div>
 
       <Handle
