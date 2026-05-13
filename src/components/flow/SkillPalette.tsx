@@ -1,10 +1,12 @@
 'use client'
 
-import type { Skill } from './skills'
+import type { Skill, FlowTemplate } from './skills'
+import { FLOW_TEMPLATES } from './skills'
 
 interface SkillPaletteProps {
   skills: Skill[]
   onGenerateClick: () => void
+  onLoadTemplate: (template: FlowTemplate) => void
 }
 
 function DraggableSkillCard({ skill }: { skill: Skill }) {
@@ -50,7 +52,43 @@ function DraggableSkillCard({ skill }: { skill: Skill }) {
   )
 }
 
-export function SkillPalette({ skills, onGenerateClick }: SkillPaletteProps) {
+function TemplateCard({ template, onLoad }: { template: FlowTemplate; onLoad: () => void }) {
+  return (
+    <button
+      onClick={onLoad}
+      style={{
+        width: '100%',
+        padding: '9px 12px',
+        background: '#0D1117',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 10,
+        cursor: 'pointer',
+        textAlign: 'left',
+        transition: 'border-color 0.15s, background 0.15s',
+      }}
+      onMouseEnter={e => {
+        const el = e.currentTarget as HTMLButtonElement
+        el.style.borderColor = 'rgba(124,58,237,0.5)'
+        el.style.background = 'rgba(124,58,237,0.06)'
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget as HTMLButtonElement
+        el.style.borderColor = 'rgba(255,255,255,0.08)'
+        el.style.background = '#0D1117'
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontSize: 16 }}>{template.emoji}</span>
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 600, color: '#C4B5FD' }}>{template.name}</div>
+          <div style={{ fontSize: 10, color: '#475569', marginTop: 1 }}>{template.description}</div>
+        </div>
+      </div>
+    </button>
+  )
+}
+
+export function SkillPalette({ skills, onGenerateClick, onLoadTemplate }: SkillPaletteProps) {
   const builtIn = skills.filter(s => s.category === 'built-in')
   const custom = skills.filter(s => s.category === 'custom')
 
@@ -101,8 +139,20 @@ export function SkillPalette({ skills, onGenerateClick }: SkillPaletteProps) {
         </button>
       </div>
 
-      {/* Scrollable skill list */}
+      {/* Scrollable content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '12px 12px' }}>
+
+        {/* Templates */}
+        <div style={{ fontSize: 10, color: '#334155', fontFamily: 'var(--font-geist-mono)', marginBottom: 8 }}>
+          TEMPLATES — click to load
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
+          {FLOW_TEMPLATES.map(t => (
+            <TemplateCard key={t.id} template={t} onLoad={() => onLoadTemplate(t)} />
+          ))}
+        </div>
+
+        {/* Built-in skills */}
         <div style={{ fontSize: 10, color: '#334155', fontFamily: 'var(--font-geist-mono)', marginBottom: 8 }}>
           BUILT-IN — drag to canvas
         </div>
@@ -143,7 +193,7 @@ export function SkillPalette({ skills, onGenerateClick }: SkillPaletteProps) {
           flexShrink: 0,
         }}
       >
-        Drag skills onto the canvas. Connect them to build a flow.
+        Select node + Delete key to remove.
       </div>
     </div>
   )

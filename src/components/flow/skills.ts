@@ -1,3 +1,19 @@
+export interface FlowTemplate {
+  id: string
+  name: string
+  emoji: string
+  description: string
+  skillIds: string[]
+}
+
+export const FLOW_TEMPLATES: FlowTemplate[] = [
+  { id: 'summarize-format', name: 'Summarize → Format', emoji: '✂️', description: 'Condense then structure any text', skillIds: ['summarizer', 'formatter'] },
+  { id: 'ba-qa', name: 'BA → QA', emoji: '📊', description: 'Requirements then test plan', skillIds: ['ba', 'qa'] },
+  { id: 'dev-qa', name: 'Dev → QA', emoji: '⚡', description: 'Code review then test cases', skillIds: ['developer', 'qa'] },
+  { id: 'strategy-content', name: 'Strategy → Content', emoji: '🚀', description: 'Business brief then social posts', skillIds: ['entrepreneur', 'social_media'] },
+  { id: 'architect-dev', name: 'Architect → Dev', emoji: '🏗️', description: 'Design decision then implementation plan', skillIds: ['architect', 'developer'] },
+]
+
 export interface Skill {
   id: string
   name: string
