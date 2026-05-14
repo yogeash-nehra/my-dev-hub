@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Script from 'next/script'
+import Clarity from '@microsoft/clarity'
 
 const CLARITY_ID = 'wqnx26dkgw'
 const STORAGE_KEY = 'cookie_consent'
@@ -14,13 +14,19 @@ export function CookieBanner() {
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved === 'accepted') setStatus('accepted')
-    else if (saved === 'declined') setStatus('declined')
-    else setStatus('pending')
+    if (saved === 'accepted') {
+      Clarity.init(CLARITY_ID)
+      setStatus('accepted')
+    } else if (saved === 'declined') {
+      setStatus('declined')
+    } else {
+      setStatus('pending')
+    }
   }, [])
 
   const accept = () => {
     localStorage.setItem(STORAGE_KEY, 'accepted')
+    Clarity.init(CLARITY_ID)
     setStatus('accepted')
   }
 
@@ -32,17 +38,6 @@ export function CookieBanner() {
 
   return (
     <>
-      {/* Load Clarity only after consent */}
-      {status === 'accepted' && (
-        <Script id="clarity" strategy="afterInteractive">{`
-          (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "${CLARITY_ID}");
-        `}</Script>
-      )}
-
       {/* Banner — only when pending */}
       {status === 'pending' && (
         <div
@@ -94,11 +89,8 @@ export function CookieBanner() {
 
             {/* Copy */}
             <div style={{ flex: 1, minWidth: 0 }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#F1F5F9' }}>
-                om nom nom.{' '}
-              </span>
-              <span style={{ fontSize: 13, color: '#475569' }}>
-                we eat cookies because cookie good. that&apos;s literally it.
+              <span style={{ fontSize: 13, color: '#F1F5F9' }}>
+                can i consume your cookies please.
               </span>
             </div>
 
@@ -128,7 +120,7 @@ export function CookieBanner() {
                   el.style.borderColor = 'rgba(255,255,255,0.09)'
                 }}
               >
-                i&apos;m on a diet
+                no munchie on my cookies
               </button>
               <button
                 onClick={accept}
@@ -148,7 +140,7 @@ export function CookieBanner() {
                 onMouseEnter={e => { e.currentTarget.style.opacity = '0.85' }}
                 onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
               >
-                have one from me 🍪
+                have my cookies 🍪
               </button>
             </div>
           </div>
