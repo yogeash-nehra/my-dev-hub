@@ -17,7 +17,7 @@ export async function GET() {
     const { blobs } = await list({ prefix: BLOB_PATH, limit: 1, token: BLOB_TOKEN })
     if (!blobs.length) return Response.json({ positions: [], source: 'blob' })
 
-    const res = await fetch(blobs[0].url)
+    const res = await fetch(blobs[0].url, { cache: 'no-store' })
     if (!res.ok) return Response.json({ positions: [], source: 'blob' })
 
     const positions = await res.json() as Position[]

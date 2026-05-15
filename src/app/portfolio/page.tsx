@@ -125,9 +125,25 @@ async function kvSave(positions: Position[]): Promise<void> {
 }
 
 async function loadPositions(): Promise<Position[]> {
+  const local  = lsLoad()
   const remote = await kvLoad()
-  if (remote !== null) { lsSave(remote); return remote }
-  return lsLoad()
+
+  if (remote === null) return local  // Blob not configured
+
+  // Merge: include any positions added locally (e.g. from trading page) that
+  // may not yet be reflected in Blob due to CDN propagation delay after PUT
+  const remoteIds = new Set(remote.map(p => p.id))
+  const localOnly = local.filter(p => !remoteIds.has(p.id))
+
+  if (localOnly.length > 0) {
+    const merged = [...remote, ...localOnly]
+    void kvSave(merged)
+    lsSave(merged)
+    return merged
+  }
+
+  lsSave(remote)
+  return remote
 }
 
 async function savePositions(positions: Position[]): Promise<void> {

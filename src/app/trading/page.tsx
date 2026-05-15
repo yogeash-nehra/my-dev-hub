@@ -327,12 +327,14 @@ export default function TradingDashboard() {
           lastReasoning: finalResult.reasoning,
         }
         const next = [...(data.positions ?? []), newPos]
+        // Write to localStorage first so portfolio page can merge it
+        // even if Blob CDN hasn't propagated the PUT yet
+        try { localStorage.setItem('portfolio_positions_v1', JSON.stringify(next)) } catch {}
         await fetch('/api/portfolio/positions', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ positions: next }),
         })
-        try { localStorage.setItem('portfolio_positions_v1', JSON.stringify(next)) } catch {}
       }
       setAddedPos(true)
     } catch {
