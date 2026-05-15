@@ -3,6 +3,14 @@ import Anthropic from '@anthropic-ai/sdk'
 
 export const maxDuration = 300
 
+// Preflight — checks keys without exposing values
+export async function GET() {
+  return Response.json({
+    anthropic: !!process.env.ANTHROPIC_API_KEY,
+    alphaVantage: !!process.env.ALPHA_VANTAGE_API_KEY,
+  })
+}
+
 // ── Alpha Vantage helpers ──────────────────────────────────────────────────────
 
 async function fetchAV(fn: string, params: Record<string, string>) {
@@ -208,6 +216,7 @@ export async function POST(req: NextRequest) {
         const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
         // ── Fetch market data ────────────────────────────────────────────────
+        emit({ type: 'progress', step: 0, total: 7, label: 'Fetching market data' })
         emit({ type: 'status', content: `Fetching market data for ${ticker}…` })
 
         let quoteText = `${ticker} — market data unavailable`
@@ -244,7 +253,9 @@ export async function POST(req: NextRequest) {
         const outputs: Record<string, string> = {}
 
         // ── Run agent pipeline ───────────────────────────────────────────────
-        for (const agent of PIPELINE) {
+        for (let i = 0; i < PIPELINE.length; i++) {
+          const agent = PIPELINE[i]
+          emit({ type: 'progress', step: i + 1, total: 7, label: agent.label })
           emit({ type: 'agent_start', agentId: agent.id, label: agent.label })
 
           const userContent = agent.user(ticker, date, ctx, outputs)
