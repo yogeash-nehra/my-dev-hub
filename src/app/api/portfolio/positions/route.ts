@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { put, list } from '@vercel/blob'
 
 const BLOB_PATH = 'portfolio/positions.json'
+const BLOB_TOKEN = process.env['BLOB2_READ_WRITE_TOKEN'] ?? process.env['BLOB_READ_WRITE_TOKEN']
 
 interface Position {
   id: string
@@ -13,7 +14,7 @@ interface Position {
 
 export async function GET() {
   try {
-    const { blobs } = await list({ prefix: BLOB_PATH, limit: 1 })
+    const { blobs } = await list({ prefix: BLOB_PATH, limit: 1, token: BLOB_TOKEN })
     if (!blobs.length) return Response.json({ positions: [], source: 'blob' })
 
     const res = await fetch(blobs[0].url)
@@ -38,6 +39,7 @@ export async function PUT(req: NextRequest) {
       access: 'public',
       addRandomSuffix: false,
       contentType: 'application/json',
+      token: BLOB_TOKEN,
     })
     return Response.json({ ok: true })
   } catch (err) {
