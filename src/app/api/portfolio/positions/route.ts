@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
-import { kv } from '@vercel/kv'
+import { put, list } from '@vercel/blob'
 
-const KV_KEY = 'portfolio:positions'
+const BLOB_PATH = 'portfolio/positions.json'
 
 interface Position {
   id: string
@@ -13,12 +13,18 @@ interface Position {
 
 export async function GET() {
   try {
-    const positions = await kv.get<Position[]>(KV_KEY)
-    return Response.json({ positions: positions ?? [], source: 'kv' })
+    const { blobs } = await list({ prefix: BLOB_PATH, limit: 1 })
+    if (!blobs.length) return Response.json({ positions: [], source: 'blob' })
+
+    const res = await fetch(blobs[0].url)
+    if (!res.ok) return Response.json({ positions: [], source: 'blob' })
+
+    const positions = await res.json() as Position[]
+    return Response.json({ positions, source: 'blob' })
   } catch (err) {
-    // KV not configured — client will fall back to localStorage
-    console.error('KV load failed:', err)
-    return Response.json({ positions: null, source: 'error', error: 'KV not configured' })
+    // Blob not configured — client falls back to localStorage
+    console.error('Blob load failed:', err)
+    return Response.json({ positions: null, source: 'error', error: 'Blob not configured' })
   }
 }
 
@@ -28,10 +34,14 @@ export async function PUT(req: NextRequest) {
     return Response.json({ error: 'positions must be an array' }, { status: 400 })
   }
   try {
-    await kv.set(KV_KEY, positions)
+    await put(BLOB_PATH, JSON.stringify(positions), {
+      access: 'public',
+      addRandomSuffix: false,
+      contentType: 'application/json',
+    })
     return Response.json({ ok: true })
   } catch (err) {
-    console.error('KV save failed:', err)
-    return Response.json({ error: 'KV not configured' }, { status: 500 })
+    console.error('Blob save failed:', err)
+    return Response.json({ error: 'Blob not configured' }, { status: 500 })
   }
 }
