@@ -114,6 +114,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <span style={{ fontSize: 14 }}>📈</span>
             Trading
           </Link>
+          <Link
+            href="/portfolio"
+            style={{
+              fontSize: 13,
+              color: '#64748B',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              transition: 'color 0.15s',
+            }}
+          >
+            <span style={{ fontSize: 14 }}>💼</span>
+            Portfolio
+          </Link>
         </nav>
         {children}
         <CookieBanner />
