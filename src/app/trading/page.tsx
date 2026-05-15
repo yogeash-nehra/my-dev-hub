@@ -143,6 +143,13 @@ export default function TradingDashboard() {
   const [finalResult, setFinalResult] = useState<FinalResult | null>(null)
   const [history,    setHistory]     = useState<TradeRecord[]>([])
 
+  // Add-to-portfolio panel on result card
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [addShares,   setAddShares]   = useState('')
+  const [addCost,     setAddCost]     = useState('')
+  const [addingPos,   setAddingPos]   = useState(false)
+  const [addedPos,    setAddedPos]    = useState(false)
+
   const termRef    = useRef<HTMLDivElement>(null)
   const startRef   = useRef<number | null>(null)
   const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -191,6 +198,10 @@ export default function TradingDashboard() {
     setFinalResult(null)
     setCurrentStep(0)
     setStepLabel('')
+    setShowAddForm(false)
+    setAddShares('')
+    setAddCost('')
+    setAddedPos(false)
   }
 
   const run = useCallback(async () => {
@@ -292,6 +303,44 @@ export default function TradingDashboard() {
       n.has(id) ? n.delete(id) : n.add(id)
       return n
     })
+
+  const addToPortfolio = async () => {
+    if (!finalResult) return
+    const s = parseFloat(addShares)
+    const c = parseFloat(addCost)
+    if (isNaN(s) || s <= 0 || isNaN(c) || c <= 0) return
+    setAddingPos(true)
+    try {
+      const res  = await fetch('/api/portfolio/positions')
+      const data = await res.json()
+      const existing = (data.positions ?? []) as Array<{ ticker: string }>
+      if (!existing.some(p => p.ticker === finalResult.ticker)) {
+        const newPos = {
+          id: `${finalResult.ticker}-${Date.now()}`,
+          ticker: finalResult.ticker,
+          shares: s,
+          avgCost: c,
+          addedDate: new Date().toISOString().slice(0, 10),
+          lastAnalyzed: new Date().toISOString(),
+          lastDecision: finalResult.decision,
+          lastConfidence: finalResult.confidence,
+          lastReasoning: finalResult.reasoning,
+        }
+        const next = [...(data.positions ?? []), newPos]
+        await fetch('/api/portfolio/positions', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ positions: next }),
+        })
+        try { localStorage.setItem('portfolio_positions_v1', JSON.stringify(next)) } catch {}
+      }
+      setAddedPos(true)
+    } catch {
+      // silent — portfolio page will still reflect state from Blob
+    } finally {
+      setAddingPos(false)
+    }
+  }
 
   const hasOutput = statusLines.length > 0 || marketInfo != null || Object.keys(agentStatuses).length > 0 || errors.length > 0
   const canRun    = !running && preflight !== 'checking' && preflight !== 'missing'
@@ -654,6 +703,74 @@ export default function TradingDashboard() {
                     {finalResult.reasoning}
                   </p>
                 )}
+
+                {/* Add to Portfolio */}
+                <div className="mt-4 pt-4 border-t border-current/20">
+                  {addedPos ? (
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-emerald-400">✓</span>
+                      <span className="opacity-80">{finalResult.ticker} added to portfolio</span>
+                      <a
+                        href="/portfolio"
+                        className="ml-auto text-xs underline opacity-50 hover:opacity-100 transition"
+                      >
+                        View Portfolio →
+                      </a>
+                    </div>
+                  ) : showAddForm ? (
+                    <div className="flex flex-wrap items-end gap-3">
+                      <div>
+                        <label className="block text-xs opacity-50 mb-1">Shares</label>
+                        <input
+                          type="number"
+                          value={addShares}
+                          onChange={e => setAddShares(e.target.value)}
+                          placeholder="10"
+                          min="0.001"
+                          step="any"
+                          className="w-24 bg-black/30 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-slate-100 focus:border-white/40 outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs opacity-50 mb-1">Avg Cost ($)</label>
+                        <input
+                          type="number"
+                          value={addCost}
+                          onChange={e => setAddCost(e.target.value)}
+                          placeholder="580.00"
+                          min="0.01"
+                          step="any"
+                          className="w-28 bg-black/30 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-slate-100 focus:border-white/40 outline-none"
+                        />
+                      </div>
+                      <button
+                        onClick={addToPortfolio}
+                        disabled={addingPos}
+                        className="px-4 py-1.5 rounded-lg text-sm font-bold bg-white/10 hover:bg-white/20 transition border border-white/20 disabled:opacity-50"
+                      >
+                        {addingPos ? (
+                          <span className="flex items-center gap-1.5">
+                            <span className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />
+                            Saving…
+                          </span>
+                        ) : 'Save to Portfolio'}
+                      </button>
+                      <button
+                        onClick={() => setShowAddForm(false)}
+                        className="px-3 py-1.5 text-xs opacity-50 hover:opacity-100 transition"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setShowAddForm(true)}
+                      className="text-sm font-semibold opacity-60 hover:opacity-100 transition flex items-center gap-2"
+                    >
+                      + Add {finalResult.ticker} to Portfolio
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
