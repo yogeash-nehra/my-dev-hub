@@ -1,32 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-
-const roles = [
-  'developers',
-  'founders',
-  'business analysts',
-  'QA engineers',
-  'IT teams',
-  'social creators',
-  'architects',
-]
-
 export function Hero() {
-  const [index, setIndex] = useState(0)
-  const [visible, setVisible] = useState(true)
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setVisible(false)
-      setTimeout(() => {
-        setIndex(i => (i + 1) % roles.length)
-        setVisible(true)
-      }, 300)
-    }, 2200)
-    return () => clearInterval(id)
-  }, [])
-
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pb-28 grid-bg overflow-hidden">
       {/* Glow blobs */}
@@ -49,44 +23,27 @@ export function Hero() {
       {/* Badge */}
       <div className="relative mb-8 flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm text-slate-400">
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        Multi-agent AI workspace
+        The AI digest for developers
       </div>
 
       {/* Headline */}
       <h1 className="relative text-center font-bold tracking-tight leading-[1.08]" style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}>
-        <span className="text-slate-50">AI that actually</span>
+        <span className="text-slate-50">Signal, not</span>
         <br />
-        <span className="gradient-text">does the work.</span>
+        <span className="gradient-text">noise.</span>
       </h1>
 
-      {/* Cycling role */}
-      <p className="relative mt-6 text-center text-slate-400" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.35rem)' }}>
-        For{' '}
-        <span
-          className="font-semibold text-slate-200"
-          style={{
-            display: 'inline-block',
-            transition: 'opacity 0.25s ease, transform 0.25s ease',
-            opacity: visible ? 1 : 0,
-            transform: visible ? 'translateY(0)' : 'translateY(-8px)',
-            minWidth: '12ch',
-            textAlign: 'left',
-          }}
-        >
-          {roles[index]}.
-        </span>
-      </p>
-
       {/* Sub copy */}
-      <p className="relative mt-4 text-center text-slate-500 max-w-xl leading-relaxed" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}>
-        Skip the back-and-forth. Describe what you need — code review, test plan, proposal,
-        research brief — and specialized agents deliver a finished output in seconds.
+      <p className="relative mt-6 text-center text-slate-400 max-w-xl leading-relaxed" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}>
+        A daily-curated AI digest built for developers — filtered from 30+ primary sources
+        against a published quality rubric, zero fluff. Then build your own agent
+        workflows and lean on a dev agent for review, debugging, and test generation.
       </p>
 
       {/* CTAs */}
       <div className="relative mt-10 flex flex-wrap gap-4 justify-center">
         <a
-          href="#demo"
+          href="/digest"
           className="px-7 py-3 rounded-lg font-semibold text-white transition-all duration-200"
           style={{
             background: 'linear-gradient(135deg, #7C3AED, #2563EB)',
@@ -95,7 +52,7 @@ export function Hero() {
           onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 0 32px -4px rgba(124,58,237,0.7)')}
           onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 0 24px -4px rgba(124,58,237,0.5)')}
         >
-          Try it free →
+          Read today's digest →
         </a>
         <a
           href="https://github.com/yogeash-nehra/my-dev-hub"

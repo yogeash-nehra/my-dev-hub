@@ -9,11 +9,11 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Dev Hub — AI that actually does the work',
-  description: 'A multi-agent AI workspace for developers, founders, analysts, and everyone in between. Pick your role. Get real outputs in seconds.',
+  title: 'Dev Hub — The AI Digest for developers',
+  description: 'A daily-curated AI digest for developers, plus a visual workflow builder and dev agent. Filtered from 30+ primary sources against a published quality rubric. Zero fluff.',
   openGraph: {
-    title: 'Dev Hub — AI that actually does the work',
-    description: 'Pick your role. Get real AI-produced outputs in seconds.',
+    title: 'Dev Hub — The AI Digest for developers',
+    description: 'Daily-curated AI signal, filtered from 30+ sources. Build your own agent workflows on top of it.',
     type: 'website',
   },
 }
@@ -54,22 +54,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </Link>
           <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.08)' }} />
           <Link
-            href="/flow"
-            style={{
-              fontSize: 13,
-              color: '#64748B',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 5,
-              transition: 'color 0.15s',
-            }}
-            onMouseEnter={undefined}
-          >
-            <span style={{ fontSize: 14 }}>◈</span>
-            Flow Builder
-          </Link>
-          <Link
             href="/digest"
             style={{
               fontSize: 13,
@@ -85,6 +69,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             AI Digest
           </Link>
           <Link
+            href="/flow"
+            style={{
+              fontSize: 13,
+              color: '#64748B',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              transition: 'color 0.15s',
+            }}
+          >
+            <span style={{ fontSize: 14 }}>◈</span>
+            Flow Builder
+          </Link>
+          <Link
             href="/skills"
             style={{
               fontSize: 13,
@@ -98,36 +97,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             <span style={{ fontSize: 14 }}>⚡</span>
             Skills
-          </Link>
-          <Link
-            href="/trading"
-            style={{
-              fontSize: 13,
-              color: '#64748B',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 5,
-              transition: 'color 0.15s',
-            }}
-          >
-            <span style={{ fontSize: 14 }}>📈</span>
-            Trading
-          </Link>
-          <Link
-            href="/portfolio"
-            style={{
-              fontSize: 13,
-              color: '#64748B',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 5,
-              transition: 'color 0.15s',
-            }}
-          >
-            <span style={{ fontSize: 14 }}>💼</span>
-            Portfolio
           </Link>
         </nav>
         {children}

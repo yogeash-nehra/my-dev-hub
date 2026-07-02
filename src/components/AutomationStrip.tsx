@@ -84,7 +84,6 @@ export function AutomationStrip() {
         <div className="mt-14 flex flex-wrap justify-center gap-x-12 gap-y-4">
           {[
             { value: '40+', label: 'sources scanned daily' },
-            { value: '7', label: 'specialized roles' },
             { value: '5+', label: 'orchestrated workflows' },
             { value: '< 30s', label: 'to a finished output' },
           ].map(s => (

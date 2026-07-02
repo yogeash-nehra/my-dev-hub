@@ -1,118 +1,26 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
-const roles = [
-  {
-    id: 'developer',
-    emoji: '⚡',
-    label: 'Developer',
-    tagline: 'Ship faster. Break less.',
-    situation: 'You just got PRs to review before standup.',
-    agentLabel: 'Dev Agent',
-    color: '#3B82F6',
-    examples: [
-      'Review this code for bugs, edge cases, and security issues:\n\n```js\nasync function getUser(id) {\n  const user = await db.query(`SELECT * FROM users WHERE id = ${id}`)\n  return user.rows[0]\n}\n```',
-      'Generate unit tests for a function that validates email addresses and passwords (min 8 chars, 1 uppercase, 1 number)',
-      'Debug: TypeError: Cannot read properties of undefined (reading "map") — occurs in React when fetching data on mount',
-      'Explain the difference between useEffect, useLayoutEffect, and useInsertionEffect with when to use each',
-    ],
-  },
-  {
-    id: 'architect',
-    emoji: '🏗️',
-    label: 'Architect',
-    tagline: 'Design systems that scale.',
-    situation: 'Tech stack decision due by end of day.',
-    agentLabel: 'Architect Agent',
-    color: '#8B5CF6',
-    examples: [
-      'Compare PostgreSQL vs MongoDB vs DynamoDB for a multi-tenant SaaS app with 500k users. Give a direct recommendation.',
-      'Design an API rate limiting strategy for a public REST API that needs to handle 10k req/min with per-user quotas',
-      'Microservices vs monolith for a 6-person startup building a B2B analytics platform. Be opinionated.',
-      'Design a real-time notification system for a marketplace app — WebSockets vs SSE vs polling',
-    ],
-  },
-  {
-    id: 'entrepreneur',
-    emoji: '🚀',
-    label: 'Entrepreneur',
-    tagline: 'Move fast. Think clearly.',
-    situation: 'New enterprise prospect asked for a proposal.',
-    agentLabel: 'Ops Agent',
-    color: '#F59E0B',
-    examples: [
-      'Write a one-page business proposal for an AI-powered scheduling tool for healthcare clinics',
-      'Research the competitive landscape for B2B project management tools — key players, gaps, and where to position',
-      'Draft a Q1 investor update email: shipped auth, onboarded 3 enterprise pilots, $180k ARR, raising $1.5M seed',
-      'SWOT analysis for entering the AI-powered legal document review market as a bootstrapped startup',
-    ],
-  },
-  {
-    id: 'ba',
-    emoji: '📊',
-    label: 'Business Analyst',
-    tagline: 'Turn requirements into clarity.',
-    situation: 'Requirements meeting transcript just dropped.',
-    agentLabel: 'BA Agent',
-    color: '#10B981',
-    examples: [
-      'Write user stories and acceptance criteria for a two-factor authentication feature on a mobile banking app',
-      'Document business requirements for a real-time inventory dashboard for a retail chain with 50 stores',
-      'Create a process flow for employee offboarding including IT, HR, and finance touchpoints',
-      'Write a BRD section for migrating customer data from Salesforce to HubSpot with zero downtime',
-    ],
-  },
-  {
-    id: 'qa',
-    emoji: '🔍',
-    label: 'QA Engineer',
-    tagline: 'Find it before they do.',
-    situation: 'Integration ships Friday. Test plan needed now.',
-    agentLabel: 'QA Agent',
-    color: '#EF4444',
-    examples: [
-      'Generate a complete test plan for a Stripe payment integration — happy path, failures, webhooks, and edge cases',
-      'Write test cases for a date-range picker: min/max constraints, timezone handling, invalid ranges',
-      'Design a regression testing checklist for a mobile app release covering iOS 17 and Android 14',
-      'Create a performance testing strategy for an API endpoint that must handle 1000 concurrent users',
-    ],
-  },
-  {
-    id: 'it_support',
-    emoji: '🛠️',
-    label: 'IT Support',
-    tagline: 'Fix it fast. Document it right.',
-    situation: 'Production issue just came in. Runbook needed.',
-    agentLabel: 'IT Support Agent',
-    color: '#06B6D4',
-    examples: [
-      'Write a troubleshooting runbook for users unable to connect to VPN — Windows and Mac coverage',
-      'Create an incident response playbook for a production database outage — detection to post-mortem',
-      'Knowledge base article: How to reset MFA for a locked-out Office 365 account (helpdesk procedure)',
-      'Write a system access request and provisioning process for onboarding new developers',
-    ],
-  },
-  {
-    id: 'social_media',
-    emoji: '📱',
-    label: 'Social Media',
-    tagline: 'Create content that lands.',
-    situation: 'Product launch is Monday. Content needed now.',
-    agentLabel: 'Content Agent',
-    color: '#EC4899',
-    examples: [
-      'Write 3 LinkedIn posts about how AI is changing developer workflows — insight-led, not hype',
-      'Create a Twitter/X thread (6 tweets) on why most startups fail at product-market fit and how to avoid it',
-      'Draft a product launch announcement for Instagram and LinkedIn: launching an AI meeting notes tool',
-      'Write 5 content ideas with hooks for a personal brand in the B2B SaaS space, audience: CTOs and founders',
-    ],
-  },
-]
+const role = {
+  id: 'developer',
+  emoji: '⚡',
+  label: 'Developer',
+  tagline: 'Ship faster. Break less.',
+  situation: 'You just got PRs to review before standup.',
+  agentLabel: 'Dev Agent',
+  color: '#3B82F6',
+  examples: [
+    'Review this code for bugs, edge cases, and security issues:\n\n```js\nasync function getUser(id) {\n  const user = await db.query(`SELECT * FROM users WHERE id = ${id}`)\n  return user.rows[0]\n}\n```',
+    'Generate unit tests for a function that validates email addresses and passwords (min 8 chars, 1 uppercase, 1 number)',
+    'Debug: TypeError: Cannot read properties of undefined (reading "map") — occurs in React when fetching data on mount',
+    'Explain the difference between useEffect, useLayoutEffect, and useInsertionEffect with when to use each',
+  ],
+}
 
 function LoadingDots() {
   return (
@@ -142,7 +50,6 @@ function CopyButton({ text }: { text: string }) {
 }
 
 export function RoleDemo() {
-  const [selectedRole, setSelectedRole] = useState(roles[0])
   const [prompt, setPrompt] = useState('')
   const [output, setOutput] = useState('')
   const [streaming, setStreaming] = useState(false)
@@ -152,26 +59,6 @@ export function RoleDemo() {
   const [elapsed, setElapsed] = useState<number | null>(null)
   const outputRef = useRef<HTMLDivElement>(null)
   const startTimeRef = useRef<number>(0)
-
-  const selectRole = useCallback((role: typeof roles[0]) => {
-    setSelectedRole(role)
-    setPrompt('')
-    setOutput('')
-    setDone(false)
-    setError('')
-    setActiveExample(null)
-    setElapsed(null)
-  }, [])
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const { roleId } = (e as CustomEvent).detail
-      const role = roles.find(r => r.id === roleId)
-      if (role) selectRole(role)
-    }
-    window.addEventListener('devhub:selectRole', handler)
-    return () => window.removeEventListener('devhub:selectRole', handler)
-  }, [selectRole])
 
   const pickExample = (example: string, i: number) => {
     setPrompt(example)
@@ -194,7 +81,7 @@ export function RoleDemo() {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt.trim(), role: selectedRole.id }),
+        body: JSON.stringify({ prompt: prompt.trim(), role: role.id }),
       })
 
       if (!res.ok) {
@@ -218,7 +105,7 @@ export function RoleDemo() {
       setStreaming(false)
       setDone(true)
     }
-  }, [prompt, selectedRole.id, streaming])
+  }, [prompt, streaming])
 
   const reset = () => {
     setOutput('')
@@ -235,52 +122,27 @@ export function RoleDemo() {
         {/* Header */}
         <div className="text-center mb-12">
           <p className="text-sm font-medium text-purple-400 tracking-widest uppercase mb-3">Live demo</p>
-          <h2 className="text-4xl font-bold text-slate-50">Pick your role. Get real work done.</h2>
+          <h2 className="text-4xl font-bold text-slate-50">Dev Agent. Get real work done.</h2>
           <p className="mt-4 text-slate-400 max-w-lg mx-auto">
-            No signup. No credits. Pick what you do, describe what you need, and get a finished output.
+            No signup. No credits. Describe what you need, and get a finished output.
           </p>
-        </div>
-
-        {/* Role selector */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 mb-8">
-          {roles.map(role => {
-            const active = role.id === selectedRole.id
-            return (
-              <button
-                key={role.id}
-                onClick={() => selectRole(role)}
-                className="flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center transition-all duration-200"
-                style={{
-                  borderColor: active ? role.color : 'rgba(255,255,255,0.08)',
-                  background: active ? `${role.color}12` : '#0D1117',
-                  boxShadow: active ? `0 0 18px -4px ${role.color}50` : 'none',
-                }}
-              >
-                <span className="text-2xl">{role.emoji}</span>
-                <span className="text-xs font-medium leading-tight"
-                  style={{ color: active ? role.color : '#94A3B8' }}>
-                  {role.label}
-                </span>
-              </button>
-            )
-          })}
         </div>
 
         {/* Tagline + situation */}
         <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-2">
-            <span className="text-lg">{selectedRole.emoji}</span>
-            <span className="font-semibold" style={{ color: selectedRole.color }}>{selectedRole.tagline}</span>
+            <span className="text-lg">{role.emoji}</span>
+            <span className="font-semibold" style={{ color: role.color }}>{role.tagline}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 border border-white/8 rounded-full px-3 py-1">
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: selectedRole.color }} />
-            {selectedRole.situation}
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: role.color }} />
+            {role.situation}
           </div>
         </div>
 
         {/* Example prompts */}
         <div className="flex flex-wrap gap-2 mb-5">
-          {selectedRole.examples.map((ex, i) => {
+          {role.examples.map((ex, i) => {
             const preview = ex.replace(/```[\s\S]*?```/g, '[code]').slice(0, 72)
             return (
               <button
@@ -288,8 +150,8 @@ export function RoleDemo() {
                 onClick={() => pickExample(ex, i)}
                 className="text-xs px-3 py-2 rounded-lg border transition-all duration-150 text-left"
                 style={{
-                  borderColor: activeExample === i ? selectedRole.color : 'rgba(255,255,255,0.08)',
-                  background: activeExample === i ? `${selectedRole.color}14` : '#0D1117',
+                  borderColor: activeExample === i ? role.color : 'rgba(255,255,255,0.08)',
+                  background: activeExample === i ? `${role.color}14` : '#0D1117',
                   color: activeExample === i ? '#F1F5F9' : '#94A3B8',
                 }}
               >
@@ -304,7 +166,7 @@ export function RoleDemo() {
           <textarea
             value={prompt}
             onChange={e => { setPrompt(e.target.value); setActiveExample(null) }}
-            placeholder={`Describe what you need, ${selectedRole.label}...`}
+            placeholder={`Describe what you need, ${role.label}...`}
             rows={4}
             disabled={streaming}
             className="w-full rounded-xl border bg-surface text-slate-200 placeholder-slate-600 px-4 py-3 text-sm resize-none outline-none transition-all duration-200 focus:border-purple-500/60 disabled:opacity-60"
@@ -327,8 +189,8 @@ export function RoleDemo() {
             disabled={!prompt.trim() || streaming}
             className="px-6 py-2.5 rounded-lg font-semibold text-sm text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
-              background: streaming ? '#4B5563' : `linear-gradient(135deg, ${selectedRole.color}, #7C3AED)`,
-              boxShadow: streaming ? 'none' : `0 0 20px -4px ${selectedRole.color}60`,
+              background: streaming ? '#4B5563' : `linear-gradient(135deg, ${role.color}, #7C3AED)`,
+              boxShadow: streaming ? 'none' : `0 0 20px -4px ${role.color}60`,
             }}
           >
             {streaming ? 'Working…' : 'Generate →'}
@@ -353,8 +215,8 @@ export function RoleDemo() {
             {/* Output header */}
             <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/6">
               <div className="flex items-center gap-2 text-xs text-slate-500">
-                <span>{selectedRole.emoji}</span>
-                <span>{selectedRole.agentLabel}</span>
+                <span>{role.emoji}</span>
+                <span>{role.agentLabel}</span>
                 <span style={{ color: 'rgba(255,255,255,0.15)' }}>·</span>
                 <span>claude-sonnet-4-6</span>
                 {streaming && <LoadingDots />}

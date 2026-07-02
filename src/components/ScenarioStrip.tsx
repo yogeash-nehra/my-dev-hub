@@ -2,9 +2,9 @@
 
 const scenarios = [
   {
-    roleId: 'developer',
+    id: 'code-review',
     emoji: '⚡',
-    label: 'Developer',
+    label: 'Code Review',
     color: '#3B82F6',
     time: '9:03 AM',
     situation: 'Three PRs waiting before standup.',
@@ -13,42 +13,47 @@ const scenarios = [
     metricLabel: 'per PR reviewed',
   },
   {
-    roleId: 'entrepreneur',
-    emoji: '🚀',
-    label: 'Founder',
+    id: 'digest',
+    emoji: '📡',
+    label: 'Morning Digest',
     color: '#F59E0B',
-    time: '11:30 AM',
-    situation: 'New enterprise prospect just emailed.',
-    action: 'Ops Agent drafts a tailored proposal — problem, solution, pricing table, and next steps. You edit two lines and send.',
-    metric: '45s',
-    metricLabel: 'to a sendable proposal',
+    time: '8:00 AM',
+    situation: 'Coffee\'s not even done brewing.',
+    action: 'The digest scans 30+ primary sources overnight and lands in your repo — model releases, API changes, research that matters. Zero fluff.',
+    metric: '2 min',
+    metricLabel: 'to read the whole thing',
+    href: '/digest',
   },
   {
-    roleId: 'ba',
-    emoji: '📊',
-    label: 'Business Analyst',
+    id: 'workflow',
+    emoji: '◈',
+    label: 'Flow Builder',
     color: '#10B981',
-    time: '2:00 PM',
-    situation: 'Requirements meeting transcript just dropped.',
-    action: 'BA Agent turns raw transcript into structured user stories, Given/When/Then acceptance criteria, and a process flow doc.',
-    metric: '90s',
-    metricLabel: 'from transcript to BRD',
+    time: '11:30 AM',
+    situation: 'Same multi-step task, third time this week.',
+    action: 'Chain skills into a saved workflow in the Flow Builder — input, agents, output. Run it again in one click next time.',
+    metric: '1 build',
+    metricLabel: 'reused indefinitely',
+    href: '/flow',
   },
   {
-    roleId: 'qa',
+    id: 'debug',
     emoji: '🔍',
-    label: 'QA Engineer',
+    label: 'Debugging',
     color: '#EF4444',
     time: '4:15 PM',
-    situation: 'Payment integration ships Friday.',
-    action: 'QA Agent generates the complete test plan — happy path, webhooks, edge cases, exact test data. Executable immediately.',
+    situation: 'Cryptic stack trace, prod is on fire.',
+    action: 'Dev Agent identifies the root cause first, then hands you the minimal exact fix — not a guess-and-check loop.',
     metric: '30s',
-    metricLabel: 'to a full test plan',
+    metricLabel: 'to root cause',
   },
 ]
 
-function go(roleId: string) {
-  window.dispatchEvent(new CustomEvent('devhub:selectRole', { detail: { roleId } }))
+function go(href?: string) {
+  if (href) {
+    window.location.href = href
+    return
+  }
   document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
@@ -60,15 +65,15 @@ export function ScenarioStrip() {
           <p className="text-sm font-medium text-blue-400 tracking-widest uppercase mb-3">Use cases</p>
           <h2 className="text-4xl font-bold text-slate-50">A day with the hub.</h2>
           <p className="mt-4 text-slate-400 max-w-lg mx-auto">
-            Real situations. Real outputs. Click any scenario to run it with your own task.
+            Real situations. Real outputs. Click any scenario to try it.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {scenarios.map((s) => (
             <button
-              key={s.roleId}
-              onClick={() => go(s.roleId)}
+              key={s.id}
+              onClick={() => go(s.href)}
               className="group text-left rounded-2xl border p-6 transition-all duration-200 cursor-pointer"
               style={{ background: '#0D1117', borderColor: 'rgba(255,255,255,0.08)' }}
               onMouseEnter={e => {
