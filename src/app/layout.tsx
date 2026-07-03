@@ -9,10 +9,10 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Dev Hub — The AI Digest for developers',
-  description: 'A daily-curated AI digest for developers, plus a visual workflow builder and dev agent. Filtered from 30+ primary sources against a published quality rubric. Zero fluff.',
+  title: 'Clearline — Signal, not noise. Built for developers.',
+  description: 'A daily-curated AI digest for developers, plus a visual workflow builder, a dev agent, and real reusable agent/workflow resources. Filtered from 30+ primary sources against a published quality rubric. Zero fluff.',
   openGraph: {
-    title: 'Dev Hub — The AI Digest for developers',
+    title: 'Clearline — Signal, not noise. Built for developers.',
     description: 'Daily-curated AI signal, filtered from 30+ sources. Build your own agent workflows on top of it.',
     type: 'website',
   },
@@ -46,11 +46,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
-              gap: 6,
+              gap: 7,
             }}
           >
-            <span style={{ fontSize: 16 }}>⚡</span>
-            Dev Hub
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <rect x="1" y="3.5" width="14" height="1.7" rx="0.85" fill="#7C3AED" />
+              <rect x="1" y="10.8" width="9" height="1.7" rx="0.85" fill="#2563EB" />
+            </svg>
+            Clearline
           </Link>
           <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.08)' }} />
           <Link
@@ -82,6 +85,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             <span style={{ fontSize: 14 }}>◈</span>
             Flow Builder
+          </Link>
+          <Link
+            href="/resources"
+            style={{
+              fontSize: 13,
+              color: '#64748B',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              transition: 'color 0.15s',
+            }}
+          >
+            <span style={{ fontSize: 14 }}>📚</span>
+            Resources
           </Link>
           <Link
             href="/skills"

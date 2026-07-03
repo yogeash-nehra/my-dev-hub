@@ -3,9 +3,9 @@ export function Footer() {
     <footer className="border-t border-white/5 py-12 px-6">
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex flex-col items-center md:items-start gap-1">
-          <span className="font-semibold text-slate-200">my-dev-hub</span>
+          <span className="font-semibold text-slate-200">Clearline</span>
           <span className="text-sm text-slate-500">
-            A multi-agent AI workspace. Open source.
+            Daily signal, real workflows, for developers. Open source.
           </span>
         </div>
 
