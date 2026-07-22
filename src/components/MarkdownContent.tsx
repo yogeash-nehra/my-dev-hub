@@ -7,7 +7,7 @@ import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 export function MarkdownContent({ content, streaming = false }: { content: string; streaming?: boolean }) {
   return (
-    <div className={`prose prose-invert output-prose max-w-none ${streaming ? 'streaming-cursor' : ''}`}>
+    <div className={`prose output-prose max-w-none ${streaming ? 'streaming-cursor' : ''}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -23,7 +23,7 @@ export function MarkdownContent({ content, streaming = false }: { content: strin
                   borderRadius: '8px',
                   fontSize: '0.82rem',
                   margin: '0.75rem 0',
-                  background: '#0F172A',
+                  background: '#1E1B2E',
                 }}
               >
                 {String(children).replace(/\n$/, '')}
@@ -32,8 +32,8 @@ export function MarkdownContent({ content, streaming = false }: { content: strin
               <code
                 className={className}
                 style={{
-                  background: 'rgba(124,58,237,0.12)',
-                  color: '#A78BFA',
+                  background: 'rgba(124,58,237,0.10)',
+                  color: '#6D28D9',
                   padding: '0.15em 0.4em',
                   borderRadius: '4px',
                   fontSize: '0.85em',
@@ -53,14 +53,14 @@ export function MarkdownContent({ content, streaming = false }: { content: strin
           },
           th({ children }) {
             return (
-              <th style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.1)', textAlign: 'left', color: '#E2E8F0', fontSize: '0.8rem', fontWeight: 600 }}>
+              <th style={{ padding: '8px 12px', borderBottom: '1px solid rgba(30,27,22,0.14)', textAlign: 'left', color: '#1C1A17', fontSize: '0.8rem', fontWeight: 600 }}>
                 {children}
               </th>
             )
           },
           td({ children }) {
             return (
-              <td style={{ padding: '7px 12px', borderBottom: '1px solid rgba(255,255,255,0.05)', color: '#CBD5E1', fontSize: '0.85rem' }}>
+              <td style={{ padding: '7px 12px', borderBottom: '1px solid rgba(30,27,22,0.08)', color: '#45413B', fontSize: '0.85rem' }}>
                 {children}
               </td>
             )

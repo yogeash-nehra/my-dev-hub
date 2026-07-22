@@ -39,7 +39,8 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={copy}
-      className="text-xs px-3 py-1.5 rounded-md border border-white/10 text-slate-400 hover:text-slate-200 hover:border-white/20 transition-all duration-150"
+      className="text-xs px-3 py-1.5 rounded-md transition-all duration-150"
+      style={{ border: '1px solid rgba(30,27,22,0.12)', color: '#57534E', background: '#FFFFFF' }}
     >
       {copied ? '✓ Copied' : 'Copy'}
     </button>
@@ -114,13 +115,13 @@ export function RoleDemo() {
   }
 
   return (
-    <section id="demo" className="py-24 px-6 border-t border-white/5">
+    <section id="demo" className="py-24 px-6" style={{ borderTop: '1px solid rgba(30,27,22,0.08)' }}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <p className="text-sm font-medium text-purple-400 tracking-widest uppercase mb-3">Live demo</p>
-          <h2 className="text-4xl font-bold text-slate-50">Dev Agent. Get real work done.</h2>
-          <p className="mt-4 text-slate-400 max-w-lg mx-auto">
+          <p className="text-sm font-medium tracking-widest uppercase mb-3" style={{ color: '#7C3AED' }}>Live demo</p>
+          <h2 className="text-4xl font-bold" style={{ color: '#1C1A17' }}>Dev Agent. Get real work done.</h2>
+          <p className="mt-4 max-w-lg mx-auto" style={{ color: '#57534E' }}>
             No signup. No credits. Describe what you need, and get a finished output.
           </p>
         </div>
@@ -131,7 +132,7 @@ export function RoleDemo() {
             <span className="text-lg">{role.emoji}</span>
             <span className="font-semibold" style={{ color: role.color }}>{role.tagline}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-slate-500 border border-white/8 rounded-full px-3 py-1">
+          <div className="flex items-center gap-2 text-xs rounded-full px-3 py-1" style={{ color: '#78716C', border: '1px solid rgba(30,27,22,0.12)' }}>
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: role.color }} />
             {role.situation}
           </div>
@@ -147,9 +148,9 @@ export function RoleDemo() {
                 onClick={() => pickExample(ex, i)}
                 className="text-xs px-3 py-2 rounded-lg border transition-all duration-150 text-left"
                 style={{
-                  borderColor: activeExample === i ? role.color : 'rgba(255,255,255,0.08)',
-                  background: activeExample === i ? `${role.color}14` : '#0D1117',
-                  color: activeExample === i ? '#F1F5F9' : '#94A3B8',
+                  borderColor: activeExample === i ? role.color : 'rgba(30,27,22,0.10)',
+                  background: activeExample === i ? `${role.color}12` : '#FFFFFF',
+                  color: activeExample === i ? '#1C1A17' : '#57534E',
                 }}
               >
                 {preview}{preview.length < ex.replace(/```[\s\S]*?```/g, '[code]').length ? '…' : ''}
@@ -166,17 +167,18 @@ export function RoleDemo() {
             placeholder={`Describe what you need, ${role.label}...`}
             rows={4}
             disabled={streaming}
-            className="w-full rounded-xl border bg-surface text-slate-200 placeholder-slate-600 px-4 py-3 text-sm resize-none outline-none transition-all duration-200 focus:border-purple-500/60 disabled:opacity-60"
+            className="w-full rounded-xl border px-4 py-3 text-sm resize-none outline-none transition-all duration-200 focus:border-purple-500/60 disabled:opacity-60"
             style={{
-              borderColor: 'rgba(255,255,255,0.1)',
-              background: '#0D1117',
+              borderColor: 'rgba(30,27,22,0.12)',
+              background: '#FFFFFF',
+              color: '#1C1A17',
               fontFamily: 'var(--font-geist-mono)',
             }}
             onKeyDown={e => {
               if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) generate()
             }}
           />
-          <div className="absolute bottom-3 right-3 text-xs text-slate-700">⌘↵ to generate</div>
+          <div className="absolute bottom-3 right-3 text-xs" style={{ color: '#B4AEA3' }}>⌘↵ to generate</div>
         </div>
 
         {/* Generate button */}
@@ -186,8 +188,8 @@ export function RoleDemo() {
             disabled={!prompt.trim() || streaming}
             className="px-6 py-2.5 rounded-lg font-semibold text-sm text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
-              background: streaming ? '#4B5563' : `linear-gradient(135deg, ${role.color}, #7C3AED)`,
-              boxShadow: streaming ? 'none' : `0 0 20px -4px ${role.color}60`,
+              background: streaming ? '#9CA3AF' : `linear-gradient(135deg, ${role.color}, #7C3AED)`,
+              boxShadow: streaming ? 'none' : `0 6px 16px -8px ${role.color}80`,
             }}
           >
             {streaming ? 'Working…' : 'Generate →'}
@@ -195,7 +197,8 @@ export function RoleDemo() {
           {done && (
             <button
               onClick={reset}
-              className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+              className="text-sm transition-colors"
+              style={{ color: '#8A857C' }}
             >
               ↺ Try another
             </button>
@@ -206,19 +209,19 @@ export function RoleDemo() {
         {(streaming || output || error) && (
           <div
             ref={outputRef}
-            className="mt-8 rounded-xl border border-white/8 overflow-hidden"
-            style={{ background: '#060B14' }}
+            className="mt-8 rounded-xl overflow-hidden"
+            style={{ background: '#FFFFFF', border: '1px solid rgba(30,27,22,0.10)', boxShadow: '0 1px 2px rgba(30,27,22,0.03)' }}
           >
             {/* Output header */}
-            <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/6">
-              <div className="flex items-center gap-2 text-xs text-slate-500">
+            <div className="flex items-center justify-between px-4 py-2.5" style={{ borderBottom: '1px solid rgba(30,27,22,0.08)' }}>
+              <div className="flex items-center gap-2 text-xs" style={{ color: '#78716C' }}>
                 <span>{role.emoji}</span>
                 <span>{role.agentLabel}</span>
-                <span style={{ color: 'rgba(255,255,255,0.15)' }}>·</span>
+                <span style={{ color: 'rgba(30,27,22,0.20)' }}>·</span>
                 <span>claude-sonnet-4-6</span>
                 {streaming && <LoadingDots />}
                 {done && elapsed !== null && (
-                  <span className="text-slate-600">{elapsed}s</span>
+                  <span style={{ color: '#A8A399' }}>{elapsed}s</span>
                 )}
               </div>
               {done && output && <CopyButton text={output} />}
@@ -227,7 +230,7 @@ export function RoleDemo() {
             {/* Content */}
             <div className="p-5 overflow-auto max-h-[60vh]">
               {error ? (
-                <p className="text-red-400 text-sm">{error}</p>
+                <p className="text-sm" style={{ color: '#DC2626' }}>{error}</p>
               ) : (
                 <MarkdownContent content={output} streaming={streaming} />
               )}

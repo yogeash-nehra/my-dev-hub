@@ -9,10 +9,10 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Clearline — Signal, not noise. Built for developers.',
+  title: 'Dev Hub — Signal, not noise. Built for developers.',
   description: 'A daily-curated AI digest for developers, plus a visual workflow builder, a dev agent, and real reusable agent/workflow resources. Filtered from 30+ primary sources against a published quality rubric. Zero fluff.',
   openGraph: {
-    title: 'Clearline — Signal, not noise. Built for developers.',
+    title: 'Dev Hub — Signal, not noise. Built for developers.',
     description: 'Daily-curated AI signal, filtered from 30+ sources. Build your own agent workflows on top of it.',
     type: 'website',
   },
@@ -20,13 +20,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <nav
           style={{
             height: 48,
-            background: 'rgba(8,13,20,0.95)',
-            borderBottom: '1px solid rgba(255,255,255,0.07)',
+            background: 'rgba(250,249,246,0.85)',
+            borderBottom: '1px solid rgba(30,27,22,0.09)',
             display: 'flex',
             alignItems: 'center',
             padding: '0 24px',
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             position: 'sticky',
             top: 0,
             zIndex: 100,
-            backdropFilter: 'blur(8px)',
+            backdropFilter: 'blur(10px)',
           }}
         >
           <Link
@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             style={{
               fontSize: 14,
               fontWeight: 700,
-              color: '#F1F5F9',
+              color: '#1C1A17',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -53,14 +53,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <rect x="1" y="3.5" width="14" height="1.7" rx="0.85" fill="#7C3AED" />
               <rect x="1" y="10.8" width="9" height="1.7" rx="0.85" fill="#2563EB" />
             </svg>
-            Clearline
+            Dev Hub
           </Link>
-          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.08)' }} />
+          <div style={{ width: 1, height: 20, background: 'rgba(30,27,22,0.10)' }} />
           <Link
             href="/digest"
             style={{
               fontSize: 13,
-              color: '#64748B',
+              color: '#57534E',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -75,7 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             href="/flow"
             style={{
               fontSize: 13,
-              color: '#64748B',
+              color: '#57534E',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -90,7 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             href="/resources"
             style={{
               fontSize: 13,
-              color: '#64748B',
+              color: '#57534E',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -105,7 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             href="/skills"
             style={{
               fontSize: 13,
-              color: '#64748B',
+              color: '#57534E',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',

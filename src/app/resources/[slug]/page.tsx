@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: Props) {
   const resource = getResource(slug)
   if (!resource) return {}
   return {
-    title: `${resource.title} — Clearline`,
-    description: resource.description || `A ${CATEGORY_LABELS[resource.category]} resource from Clearline.`,
+    title: `${resource.title} — Dev Hub`,
+    description: resource.description || `A ${CATEGORY_LABELS[resource.category]} resource from Dev Hub.`,
   }
 }
 
@@ -41,9 +41,9 @@ export default async function ResourcePage({ params }: Props) {
   const body = resource.content.replace(/^#\s+.+\n/, '')
 
   return (
-    <main style={{ background: '#030712', minHeight: 'calc(100vh - 48px)', padding: '48px 24px 80px' }}>
+    <main style={{ background: 'var(--bg)', minHeight: 'calc(100vh - 48px)', padding: '48px 24px 80px' }}>
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
-        <Link href="/resources" style={{ fontSize: 13, color: '#64748B', textDecoration: 'none' }}>
+        <Link href="/resources" style={{ fontSize: 13, color: '#948E84', textDecoration: 'none' }}>
           ← Resources
         </Link>
 
@@ -51,18 +51,18 @@ export default async function ResourcePage({ params }: Props) {
           <span
             style={{
               fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
-              color: '#A78BFA', background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.3)',
+              color: '#7C3AED', background: 'rgba(124,58,237,0.10)', border: '1px solid rgba(124,58,237,0.28)',
               borderRadius: 5, padding: '3px 8px',
             }}
           >
             {CATEGORY_LABELS[resource.category]}
           </span>
           {resource.domain && (
-            <span style={{ fontSize: 11.5, color: '#64748B' }}>{DOMAIN_LABELS[resource.domain]}</span>
+            <span style={{ fontSize: 11.5, color: '#948E84' }}>{DOMAIN_LABELS[resource.domain]}</span>
           )}
         </div>
 
-        <h1 style={{ fontSize: 32, fontWeight: 750, color: '#F8FAFC', margin: '0 0 28px', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: 32, fontWeight: 750, color: '#1C1A17', margin: '0 0 28px', letterSpacing: '-0.02em' }}>
           {resource.title}
         </h1>
 

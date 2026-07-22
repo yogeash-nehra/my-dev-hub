@@ -57,10 +57,10 @@ export function CookieBanner() {
             style={{
               maxWidth: 780,
               margin: '0 auto',
-              background: 'rgba(13, 17, 23, 0.96)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'rgba(255, 255, 255, 0.92)',
+              border: '1px solid rgba(30,27,22,0.10)',
               borderRadius: 16,
-              boxShadow: '0 -4px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,58,237,0.08), inset 0 1px 0 rgba(255,255,255,0.05)',
+              boxShadow: '0 12px 40px -12px rgba(30,27,22,0.22), 0 0 0 1px rgba(124,58,237,0.06)',
               backdropFilter: 'blur(20px)',
               padding: '16px 20px',
               display: 'flex',
@@ -89,7 +89,7 @@ export function CookieBanner() {
 
             {/* Copy */}
             <div style={{ flex: 1, minWidth: 0 }}>
-              <span style={{ fontSize: 13, color: '#F1F5F9' }}>
+              <span style={{ fontSize: 13, color: '#1C1A17' }}>
                 can i consume your cookies please.
               </span>
             </div>
@@ -101,9 +101,9 @@ export function CookieBanner() {
                 style={{
                   padding: '7px 14px',
                   background: 'none',
-                  border: '1px solid rgba(255,255,255,0.09)',
+                  border: '1px solid rgba(30,27,22,0.12)',
                   borderRadius: 8,
-                  color: '#475569',
+                  color: '#78716C',
                   fontSize: 12,
                   cursor: 'pointer',
                   transition: 'color 0.15s, border-color 0.15s',
@@ -111,13 +111,13 @@ export function CookieBanner() {
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget
-                  el.style.color = '#94A3B8'
-                  el.style.borderColor = 'rgba(255,255,255,0.18)'
+                  el.style.color = '#45413B'
+                  el.style.borderColor = 'rgba(30,27,22,0.22)'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget
-                  el.style.color = '#475569'
-                  el.style.borderColor = 'rgba(255,255,255,0.09)'
+                  el.style.color = '#78716C'
+                  el.style.borderColor = 'rgba(30,27,22,0.12)'
                 }}
               >
                 no munchie on my cookies
