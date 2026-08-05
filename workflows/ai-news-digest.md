@@ -136,11 +136,35 @@ Skip anything that's a restatement of a model announcement already covered by Ag
 Return: entries with score ≥3 and impact tier.
 ```
 
-#### Step 3: Consolidate, rank, and write (sequential — after all 5 agents complete)
+**Agent F — Newsletter web archive scan:**
+```
+Act as the AI news agent (agents/ai-news-agent.md already loaded).
+Read personal/sources/ai-dev-sources.md — use the "Email Newsletters" section for the full list of
+newsletters to check, their public web URLs, and what to extract from each.
+
+Scan those newsletters for AI-developer-relevant items from {{SCAN_PERIOD}}.
+Use WebFetch to load the current issue from each newsletter's public web archive URL.
+Use WebSearch with site: operators (e.g. site:tldr.tech/ai) if the direct URL doesn't surface the latest issue.
+
+For each newsletter item that looks relevant:
+1. Find the primary source URL it links to (newsletters always link out — use that, not the newsletter blurb)
+2. Fetch the primary source with WebFetch and apply the quality gate to the *original article*
+3. Score the underlying article — a newsletter mention alone adds no points
+4. Only surface items not already covered by Agent A (labs), Agent B (GitHub), Agent C (research), or Agent D (benchmarks)
+
+The value newsletters add: practitioner curation angle and coverage of hardware/infra/IT areas
+that primary source scanning tends to miss.
+
+Do NOT score the newsletter entry itself — score what it links to.
+Skip items that are restatements of stories Agents A–E already cover.
+Return: unique items with primary source links, quality gate scores, and impact tiers.
+```
+
+#### Step 3: Consolidate, rank, and write (sequential — after all 6 agents complete)
 
 ```
-You have outputs from 5 parallel scan agents covering labs, GitHub, research,
-benchmarks/community, and infrastructure from {{SCAN_PERIOD}}.
+You have outputs from 6 parallel scan agents covering labs, GitHub, research,
+benchmarks/community, infrastructure, and email newsletters from {{SCAN_PERIOD}}.
 
 Do the following in order:
 

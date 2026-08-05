@@ -171,6 +171,40 @@ High noise but occasionally the best signal comes through first here.
 
 ---
 
+## Newsletters (Scan via Web Archive)
+
+Practitioner-curated newsletters with public web archives. Fetch via WebFetch — all URLs below are confirmed working.
+These are secondary sources — always follow the primary source link and score that, not the newsletter blurb.
+Value: practitioner curation signal and coverage of hardware/infra/IT areas that web scanning misses.
+
+### TLDR Network
+URL format: `https://tldr.tech/{edition}/YYYY-MM-DD` — substitute today's date. All confirmed working.
+
+| Newsletter | URL slug | What to extract |
+|------------|----------|-----------------|
+| TLDR AI | `tldr.tech/ai/YYYY-MM-DD` | Model releases, research papers, AI tooling — **highest priority** |
+| TLDR Dev | `tldr.tech/dev/YYYY-MM-DD` | SDK changes, framework releases, developer tooling |
+| TLDR DevOps | `tldr.tech/devops/YYYY-MM-DD` | Infrastructure, CI/CD, Kubernetes, cloud platform changes |
+| TLDR Founders | `tldr.tech/founders/YYYY-MM-DD` | Dev tool and AI startup launches with technical substance |
+| TLDR IT | `tldr.tech/it/YYYY-MM-DD` | Enterprise software, IT infra — low priority unless AI-adjacent |
+| TLDR Hardware | `tldr.tech/hardware/YYYY-MM-DD` | GPU releases, chip news, hardware acceleration |
+| TLDR Infosec | `tldr.tech/infosec/YYYY-MM-DD` | Security vulnerabilities, breaches affecting AI/dev tooling |
+| TLDR Data | `tldr.tech/data/YYYY-MM-DD` | Data engineering, ML pipelines, analytics tooling |
+| TLDR (main) | `tldr.tech/YYYY-MM-DD` | Mixed tech — filter aggressively, extract AI/dev items only |
+
+### Independent Newsletters
+| Newsletter | Archive URL | Individual issue format | What to extract |
+|------------|-------------|------------------------|-----------------|
+| Superhuman (Zain K.) | `superhuman.ai/archive` | `superhuman.ai/p/[slug]` | Daily AI brief — model news, tool launches, practitioner angle |
+| The Batch (Andrew Ng) | `deeplearning.ai/the-batch/` | `deeplearning.ai/the-batch/issue-[N]` | Weekly; high-signal research, model releases, applied AI |
+| Latent Space (swyx & Alessio) | `latent.space/archive` | `latent.space/p/[slug]` | AI engineering deep dives — inference, agents, frameworks |
+| AlphaSignal | `alphasignal.ai` | `alphasignal.ai/news/[slug]` | ML papers, models, tools — good for research items |
+
+**Fetch tip:** For TLDR, use `WebFetch https://tldr.tech/ai/YYYY-MM-DD` directly. If the issue isn't published yet (weekend/holiday), try the previous weekday.
+**Quality gate:** Score the linked primary source (≥3 to include). The newsletter entry itself is not a source.
+
+---
+
 ## Sources to Exclude (Never Cite)
 
 These consistently produce low-value content for developers:
