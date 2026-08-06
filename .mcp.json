@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "dev-hub": {
+      "command": "node",
+      "args": ["mcp/dist/index.js"],
+      "env": {}
+    }
+  }
+}

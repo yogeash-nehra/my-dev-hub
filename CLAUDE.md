@@ -121,6 +121,22 @@ Then add a pointer line to MEMORY.md.
 
 ---
 
+## MCP Server
+
+The hub ships an MCP server (`mcp/`) that exposes this knowledge base to any MCP
+client — Claude Code, Claude Desktop, or your own SDK app. It serves the agents,
+prompt templates, workflows, digests, and memory as **tools** and surfaces the
+prompt templates and agents as native **prompts** (slash commands).
+
+```bash
+cd mcp && npm install && npm run build   # then run with: npm start
+```
+
+A project-scoped `.mcp.json` at the repo root registers it for Claude Code
+automatically. See `mcp/README.md` for the full tool list and client setup.
+
+---
+
 ## Claude Best Practices (in this hub)
 
 ### Prompt Caching
