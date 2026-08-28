@@ -24,6 +24,7 @@ const SECTION_LABELS: Record<string, string> = {
   'Research Papers': 'Research',
   'Tooling': 'Tooling',
   'Tooling Updates': 'Tooling',
+  'Rising Dev Tools': 'Rising',
   'Trends & Emerging Tech': 'Trends',
   'Technical Discussions': 'Discussions',
 }
@@ -145,6 +146,7 @@ const NAV_LABELS: Record<string, string> = {
   'API & SDK Changes': 'API · SDK',
   'Research': 'Research',
   'Tooling': 'Tooling',
+  'Rising Dev Tools': 'Rising',
   'Benchmarks & Leaderboards': 'Benchmarks',
   'Trends & Emerging Tech': 'Trends',
   'Technical Discussions': 'Discussions',

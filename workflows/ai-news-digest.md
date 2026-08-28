@@ -25,7 +25,7 @@ Read agents/ai-news-agent.md — research agent instructions and output format.
 Read the most recent digest in personal/digests/ — to avoid duplicating items already covered.
 ```
 
-#### Step 2: Parallel source scan (spawn all 5 agents at once)
+#### Step 2: Parallel source scan (spawn all 7 agents at once)
 
 **Agent A — Official lab sources:**
 ```
@@ -160,11 +160,36 @@ Skip items that are restatements of stories Agents A–E already cover.
 Return: unique items with primary source links, quality gate scores, and impact tiers.
 ```
 
-#### Step 3: Consolidate, rank, and write (sequential — after all 6 agents complete)
+**Agent G — Rising & under-the-radar dev tools scan:**
+```
+Act as the AI news agent (agents/ai-news-agent.md already loaded).
+Read the "Rising & Under-the-Radar Dev Tools" section of personal/sources/ai-dev-sources.md —
+use its discovery engine and selection filter.
+
+Goal: surface GitHub repos that solve a real developer problem and are climbing NOW,
+before they become household names — not the already-famous tools.
+
+1. Scan GitHub Trending: github.com/trending?since=weekly and the language views
+   github.com/trending/{rust,go,python,typescript,zig}?since=monthly (fetch with a real
+   User-Agent; a JSON mirror is an acceptable fallback — re-verify numbers on GitHub).
+2. Cross-check "Show HN" (HN, score >150), console.dev, and changelog.com/news for small
+   dev tools shipping this period.
+3. For every candidate, validate momentum on star-history.com/#owner/repo&Date — keep only
+   repos with a recent, sustained upward curve, NOT a one-day spike that already flattened.
+4. Apply the selection filter: solves a concrete problem, roughly <25k stars (or clearly
+   less-known than the dominant tool in its niche), has recent releases/commits, and is not
+   just an LLM wrapper (those belong to Agents A–C).
+5. Skip anything already covered by Agents A–F.
+
+Quality gate applies. Return: entries in the "Rising Dev Tools" output format from
+agents/ai-news-agent.md, with star count, recent growth, and impact tier.
+```
+
+#### Step 3: Consolidate, rank, and write (sequential — after all 7 agents complete)
 
 ```
-You have outputs from 6 parallel scan agents covering labs, GitHub, research,
-benchmarks/community, infrastructure, and email newsletters from {{SCAN_PERIOD}}.
+You have outputs from 7 parallel scan agents covering labs, GitHub releases, research,
+benchmarks/community, infrastructure, email newsletters, and rising dev tools from {{SCAN_PERIOD}}.
 
 Do the following in order:
 

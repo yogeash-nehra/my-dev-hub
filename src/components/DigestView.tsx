@@ -32,6 +32,7 @@ const SECTION_ACCENT: Record<string, string> = {
   'API & SDK Changes': '#059669',
   'Research': '#B45309',
   'Tooling': '#2563EB',
+  'Rising Dev Tools': '#16A34A',
   'Benchmarks & Leaderboards': '#0891B2',
   'Trends & Emerging Tech': '#DB2777',
   'Technical Discussions': '#7C3AED',
