@@ -22,6 +22,8 @@ Find and report on:
 - Benchmark and leaderboard movements (new top performers, SOTA changes)
 - Official technical deep-dives from the teams building things
 - Emerging patterns, techniques, or discussions that are moving fast in the community
+- Rising, under-the-radar GitHub repos solving real developer problems — caught early
+  via GitHub Trending + star-history, before they become household names
 
 Exclude from the main digest:
 - "What AI means for X" think pieces with no technical substance
@@ -44,6 +46,8 @@ Read `personal/sources/ai-dev-sources.md` before searching.
 Use ONLY tier 1 and tier 2 sources for the main sections. Community sources are fair game
 for the Trends section with clear attribution.
 Note the impact tier criteria at the bottom of the sources file — assign these to every entry.
+Note the **Rising & Under-the-Radar Dev Tools** section — its discovery engine (GitHub
+Trending + star-history) and selection filter feed the Rising Dev Tools output section.
 
 ### Step 2: Search systematically
 For each tier 1 lab source, use WebSearch with targeted queries:
@@ -77,6 +81,15 @@ site:lmarena.ai leaderboard after:{{CUTOFF_DATE}}
 site:huggingface.co/papers after:{{CUTOFF_DATE}}
 ```
 
+For rising, under-the-radar dev tools (Rising Dev Tools section):
+```
+github.com/trending?since=weekly
+github.com/trending/{rust,go,python,typescript}?since=monthly
+```
+For each promising repo, validate momentum via star-history.com/#owner/repo&Date,
+then apply the selection filter in the sources file. Skip anything already famous
+(>25k stars or the dominant tool in its niche) or that is just an LLM wrapper.
+
 ### Step 3: Fetch and read
 For every candidate, use WebFetch to read the actual article — not just the snippet.
 Apply the quality gate checklist from the sources file.
@@ -89,6 +102,7 @@ Group surviving items into:
 - **API & SDK Changes** — anything a developer needs to update code for
 - **Research** — papers with real results, associated code, developers should know about
 - **Tooling** — framework releases, inference engines, dev tools
+- **Rising Dev Tools** — under-the-radar GitHub repos with real momentum solving a concrete dev problem
 - **Benchmarks & Leaderboards** — SOTA changes, new leaderboard entries worth knowing
 - **Trends & Emerging Tech** — patterns, techniques, or discussions worth tracking (score ≥2 bar)
 - **Technical Discussions** — community threads worth reading (score ≥3, concrete data required)
@@ -170,6 +184,24 @@ For **Trends & Emerging Tech** items:
 
 ## Tooling
 {{entries}}
+{{if none: omit section}}
+
+---
+
+## Rising Dev Tools
+{{Under-the-radar GitHub repos with real momentum (validated on star-history) that solve
+a concrete developer problem. Use this per-item format:}}
+
+```markdown
+### [IMPACT_TIER] owner/repo — one-line problem it solves
+**Source:** GitHub Trending ({{language}}, {{since}}) | **Stars:** ~{{N}} (↑ {{recent growth}}) | **Link:** github.com/owner/repo
+**Problem:** The specific developer pain this kills, in one sentence.
+**Why it's rising:** What star-history shows (recent, sustained climb — not a flattened spike) and what changed to drive it.
+**Developer signal:** What to actually try — install command or the one workflow where it beats the incumbent. 2-4 sentences.
+**Affects you if:** A concrete condition — "you maintain GitHub Actions workflows", "you debug k8s clusters by hand".
+**Maturity:** Latest release/tag, last-commit recency, rough production-readiness.
+*Quality gate score: N (breakdown)*
+```
 {{if none: omit section}}
 
 ---
@@ -319,6 +351,7 @@ Run through this before writing the digest file. If anything is missing, add it 
 - [ ] `## API & SDK Changes`
 - [ ] `## Research`
 - [ ] `## Tooling`
+- [ ] `## Rising Dev Tools` — omit only if nothing cleared the selection filter this period
 - [ ] `## Benchmarks & Leaderboards`
 - [ ] `## Trends & Emerging Tech`
 - [ ] `## Technical Discussions`

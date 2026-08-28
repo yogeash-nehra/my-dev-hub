@@ -9,6 +9,7 @@ const SECTION_COLORS: Record<string, string> = {
   API: '#059669',
   Research: '#B45309',
   Tooling: '#2563EB',
+  Rising: '#16A34A',
   Trends: '#DB2777',
   Discussions: '#7C3AED',
 }

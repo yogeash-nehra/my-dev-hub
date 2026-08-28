@@ -31,6 +31,19 @@ stories to `HTTP 403`, bot blocks, and paywalls. Prefer structured feeds.
 7. **Track coverage.** A source marked `scrape` has no known feed yet — treat
    it as lower-reliability and double-check with a second source before relying
    on it.
+8. **GitHub Trending has no official API.** `github.com/trending` (and
+   `/trending/<language>?since=daily|weekly|monthly`) is server-rendered HTML —
+   fetch it with a real User-Agent. Community JSON mirrors exist as a fallback
+   (e.g. `https://api.gitterapp.com/repositories?language=&since=daily`); treat
+   any mirror as unofficial and re-verify a repo's real numbers on GitHub before
+   citing it.
+9. **star-history.com is a validation tool, not a feed.** Use it to *confirm
+   momentum*, never as a discovery source on its own. The star-count time series
+   for any repo is fetchable as a chart/JSON at
+   `star-history.com/#<owner>/<repo>&Date`. What you're checking: is the star
+   curve bending *upward recently* (genuine, sustained growth) versus a one-time
+   spike from a single HN/Reddit thread that already flattened. A repo only earns
+   a Rising Dev Tools slot if star-history shows the former.
 
 ---
 
@@ -112,6 +125,89 @@ Filter for papers that:
 - Show measurable performance improvements with numbers
 - Are from recognized labs (DeepMind, Meta FAIR, CMU, Stanford, MIT, AI2, Mila, ETH, Oxford)
 - Have an associated GitHub repo or released weights
+
+---
+
+## Tier 1 — Rising & Under-the-Radar Dev Tools (Discovery, Check Weekly)
+
+Great developer tools rarely arrive as a lab blog post — they show up as a
+fast-climbing GitHub repo that solves a real, specific pain (build times, git
+ergonomics, local infra, observability, DX) months before anyone writes about
+them. This section exists to catch those *while they're still early*, not after
+they've won. Different mandate from the rest of this file: here we're hunting
+for the useful-but-quiet, not the already-famous.
+
+### Discovery engine (how to find them)
+
+1. **GitHub Trending** — `github.com/trending` and the language-scoped views
+   `github.com/trending/{go,rust,python,typescript,zig}?since={daily,weekly,monthly}`.
+   Scan `weekly` and `monthly` (daily is too noisy). Fetch policy point 8 applies.
+2. **star-history.com** — for every trending candidate, pull its star curve
+   (`star-history.com/#owner/repo&Date`) and keep only repos whose growth is
+   *recent and sustained*, not a flattened one-day spike. Fetch policy point 9.
+3. **Where else the quiet ones surface** (curated discovery — all high-signal for
+   under-the-radar dev tools):
+
+   | Source | URL | Why it's good | Feed |
+   |--------|-----|---------------|------|
+   | Changelog Nightly | changelog.com/nightly | Nightly email of the day's fastest-rising **new** GitHub repos — built for exactly this | email/archive |
+   | Star History Monthly | star-history.com (newsletter) | Monthly roundup of trending repos with the star curves already drawn | scrape |
+   | OSSInsight | ossinsight.io | Analytics-backed trending repos + curated "collections"; real growth data, not vibes | scrape |
+   | Lobsters | lobste.rs | Higher signal-to-noise than HN; tag-filtered | lobste.rs/rss, lobste.rs/t/{programming,devops,ml}.rss |
+   | Hacker News — Show HN | news.ycombinator.com (Show HN, score >150) | Where builders launch their tools first | hnrss.org/show |
+   | Terminal Trove | terminaltrove.com | Catalog of new CLI/TUI tools — very on-theme for quiet dev gems | scrape |
+   | LibHunt | libhunt.com | Trending libraries per language (Awesome-* powered) | per-language RSS |
+   | console.dev | console.dev/tools | Weekly hand-picked dev tools, opinionated reviews | console.dev/rss.xml |
+   | Cooper Press weeklies | javascriptweekly.com, nodeweekly.com, golangweekly.com, pythonweekly.com, react.statuscode.com | Language-scoped curated tool/release roundups | each has /rss |
+   | Product Hunt — Dev Tools | producthunt.com/topics/developer-tools | Launch-day discovery; filter to the Trending tab | scrape |
+   | GitHub search (new + rising) | `github.com/search?q=stars:>500+created:>{{DATE}}&s=stars&type=repositories` | Directly surfaces repos created recently that already gained traction | scrape |
+
+### Selection filter — what earns a slot
+
+A repo qualifies as a **Rising Dev Tool** only if it clears ALL of these:
+- **Solves a concrete developer problem** you can state in one sentence
+  ("run GitHub Actions locally", "readable git diffs", "one-file backend").
+- **Under-the-radar:** roughly < 25k stars, OR clearly newer/less-known than the
+  dominant tool in its niche. A 100k-star household name does not belong here —
+  it goes in the main digest if it ships news.
+- **Real momentum:** star-history shows a recently steepening curve, not a spike
+  that already flattened.
+- **Actually usable now:** has releases/tags, a real README with install steps,
+  and commits within the last ~90 days (not abandoned, not vaporware).
+- **Not just an LLM wrapper:** general dev-productivity tools are the target.
+  AI/LLM infra repos already have a home in the GitHub Releases table above.
+
+Score each with the quality gate as usual, then tag impact tier. Most Rising Dev
+Tools will be `[NOTABLE]`; one that genuinely changes a workflow can be `[HIGH]`.
+
+### Seed watchlist (rotating — replace as they graduate or stall)
+
+These are real, currently-underrated tools solving real problems, grouped by the
+pain they kill. Use them as calibration for "the kind of thing we're looking
+for" and check their `releases.atom` for updates — but the discovery engine
+above is the durable source; this list is expected to churn.
+
+| Repo | Problem it solves |
+|------|-------------------|
+| nektos/act | Run GitHub Actions workflows locally before pushing |
+| casey/just | A saner command runner to replace tangled Makefiles |
+| jesseduffield/lazygit | Full git operations from a fast terminal UI |
+| dandavison/delta | Readable, syntax-highlighted git diffs and blame |
+| astral-sh/uv | Extremely fast Python packaging/venv/resolver |
+| pocketbase/pocketbase | Backend (DB + auth + API) in a single Go binary |
+| usebruno/bruno | Git-friendly, offline API client (Postman alternative) |
+| coollabsio/coolify | Self-hosted Heroku/Netlify alternative for deploys |
+| dagger/dagger | Portable, programmable CI/CD pipelines as code |
+| derailed/k9s | Navigate and debug Kubernetes clusters from a TUI |
+| wagoodman/dive | Inspect and shrink Docker image layers |
+| atuin-sh/atuin | Searchable, syncable, encrypted shell history |
+| zellij-org/zellij | Terminal multiplexer with sane defaults and layouts |
+| sxyazi/yazi | Fast, async terminal file manager |
+| evilmartians/lefthook | Fast, language-agnostic git hooks manager |
+| tursodatabase/turso | Embedded SQLite-compatible DB for the edge |
+| duckdb/duckdb | In-process OLAP — analytics without a data warehouse |
+
+**Feed for any repo above:** `https://github.com/<owner>/<repo>/releases.atom`.
 
 ---
 
