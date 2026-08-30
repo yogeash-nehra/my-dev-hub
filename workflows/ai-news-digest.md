@@ -209,6 +209,13 @@ Do the following in order:
 
 5. Select must-reads: which 1-3 items are most important? List them at the top.
 
+5b. Pick the Repo of the Day: choose the single most spotlight-worthy GitHub repo
+    across all agents — usually the standout from Agent G (Rising Dev Tools), but any
+    dev repo that genuinely earns it qualifies. Exactly one. Write it in the
+    "🏆 Repo of the Day" format from agents/ai-news-agent.md, including a runnable
+    "Try it in 60 seconds" block. If nothing clears the bar, omit the section — never
+    force a pick.
+
 6. Separate items into sections per the output format in agents/ai-news-agent.md.
    Put [NOTABLE] items in "Quick Hits" — no full entry, just title + one-line + link.
    Put anything announced-but-not-released in "Worth Watching."
