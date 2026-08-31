@@ -87,7 +87,7 @@ SWE-bench Verified · Papers With Code (State-of-the-Art)
 Simon Willison · Sebastian Raschka · Lilian Weng · Andrej Karpathy · Nathan
 Lambert (Interconnects) · Eugene Yan · Hamel Husain · The Gradient · BAIR Blog ·
 AI2 Blog · Hugging Face Papers Daily · ML Papers of the Week (DAIR.AI) · Ethan
-Mollick (One Useful Thing)
+Mollick (One Useful Thing) · Aishwarya Naresh Reganti (The Nuanced Perspective)
 
 ### Tier 2 — Community (filtered aggressively)
 
