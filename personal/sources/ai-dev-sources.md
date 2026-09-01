@@ -245,6 +245,13 @@ Read carefully — skim the title first for the "developer signal."
 | Hugging Face Papers Daily | huggingface.co/papers | Daily curated papers with community discussion — high signal | scrape |
 | ML Papers of the Week (DAIR.AI) | github.com/dair-ai/ML-Papers-of-the-Week | Curated top ML papers each week | github.com/dair-ai/ML-Papers-of-the-Week/commits/main.atom |
 | Ethan Mollick (One Useful Thing) | oneusefulthing.org | Practical AI use, benchmarked experiments, educator perspective | oneusefulthing.org/feed |
+| Aishwarya Naresh Reganti (The Nuanced Perspective) | thenuancedperspective.substack.com | Applied AI research, enterprise/GenAI, agentic workflows & AI-native products — practitioner depth, anti-hype | thenuancedperspective.substack.com/feed |
+
+> Note on The Nuanced Perspective: scan the **written** Substack posts (the `/feed`
+> RSS), not the `+youtube@substack.com` email alias — YouTube uploads with no
+> transcript or written notes fall under the podcast/video exclusion below. As a
+> practitioner newsletter it's a secondary source: follow the primary link it
+> cites and score *that*, per the newsletter policy.
 
 ---
 

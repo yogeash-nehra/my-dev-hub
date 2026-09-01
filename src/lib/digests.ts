@@ -18,6 +18,7 @@ export interface Digest extends DigestMeta {
 const DIGESTS_DIR = path.join(process.cwd(), 'personal', 'digests')
 
 const SECTION_LABELS: Record<string, string> = {
+  '🏆 Repo of the Day': 'Repo',
   'Model Releases': 'Models',
   'API & SDK Changes': 'API',
   'Research': 'Research',
@@ -141,6 +142,7 @@ export interface StructuredDigest extends DigestMeta {
 }
 
 const NAV_LABELS: Record<string, string> = {
+  '🏆 Repo of the Day': 'Repo of the Day',
   'Breaking Changes': 'Breaking',
   'Model Releases': 'Models',
   'API & SDK Changes': 'API · SDK',

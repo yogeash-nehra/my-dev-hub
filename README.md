@@ -73,6 +73,10 @@ A rotating seed watchlist (in the sources file) calibrates the bar — e.g.
 `astral-sh/uv`, `pocketbase/pocketbase`, `usebruno/bruno`, `coollabsio/coolify`,
 `dagger/dagger`, `derailed/k9s`, `atuin-sh/atuin`, `duckdb/duckdb`.
 
+Each digest also crowns a **🏆 Repo of the Day** — one featured repo (usually the
+standout from this scan) with the problem it kills and a runnable "try it in 60
+seconds" snippet. It renders as a spotlight at the top of the digest.
+
 ### Tier 1 — Benchmarks & Leaderboards (weekly)
 
 LMSYS Chatbot Arena · Open LLM Leaderboard · BigCodeBench / LiveCodeBench ·
@@ -83,7 +87,7 @@ SWE-bench Verified · Papers With Code (State-of-the-Art)
 Simon Willison · Sebastian Raschka · Lilian Weng · Andrej Karpathy · Nathan
 Lambert (Interconnects) · Eugene Yan · Hamel Husain · The Gradient · BAIR Blog ·
 AI2 Blog · Hugging Face Papers Daily · ML Papers of the Week (DAIR.AI) · Ethan
-Mollick (One Useful Thing)
+Mollick (One Useful Thing) · Aishwarya Naresh Reganti (The Nuanced Perspective)
 
 ### Tier 2 — Community (filtered aggressively)
 

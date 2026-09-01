@@ -158,6 +158,36 @@ For **Trends & Emerging Tech** items:
 
 ---
 
+## 🏆 Repo of the Day
+{{One featured GitHub repo — the single most worth-your-attention project this scan.
+**This section is permanent: every daily digest features exactly one Repo of the Day —
+it is never omitted.** Pick in this order of preference:
+1. The standout from the Rising Dev Tools scan (a repo trending / climbing right now).
+2. Any other dev repo that genuinely earns the spotlight this scan (a sharp new tool,
+   a release that changes a workflow).
+3. **Fallback when the scan surfaced nothing fresh:** feature a still-underrated tool
+   from the seed watchlist in `personal/sources/ai-dev-sources.md` — frame it honestly
+   as a watchlist pick ("A quiet-news day — reaching into the watchlist for …"), not as
+   something trending today.
+Never repeat a repo featured as Repo of the Day in the last ~14 days — check recent
+digests in `personal/digests/` and rotate. Exactly one, always present.}}
+
+```markdown
+### owner/repo — one-line pitch
+**Link:** github.com/owner/repo | **Stars:** ~{{N}} (↑ {{recent growth}}) | **Language:** {{lang}} | **License:** {{license}}
+**The problem:** The specific developer pain this kills, in one sentence.
+**Why it's today's pick:** What makes it stand out *now* — momentum on star-history, a notable release, or that it quietly solves something everyone hand-rolls. 2-3 sentences.
+**Try it in 60 seconds:** A copy-pasteable install + first command, and the one thing to run to feel the value.
+    ```bash
+    {{install one-liner}}
+    {{first command that shows the payoff}}
+    ```
+**Instead of:** The incumbent/manual approach it replaces or improves on.
+**Watch out for:** One honest caveat — maturity, platform limits, or where it doesn't fit yet.
+```
+
+---
+
 ## [BREAKING] Breaking Changes
 {{items tagged [BREAKING] only — things requiring code changes}}
 {{if none: "No breaking changes this period."}}
@@ -346,6 +376,7 @@ Run through this before writing the digest file. If anything is missing, add it 
 
 **Required sections — use these exact names, no renaming:**
 - [ ] `## This Week's Signal` with **Must-reads** block beneath it
+- [ ] `## 🏆 Repo of the Day` — REQUIRED every daily digest, exactly one featured repo, never omitted; use the seed-watchlist fallback on a quiet day and don't repeat one featured in the last ~14 days
 - [ ] `## [BREAKING] Breaking Changes` — write "No breaking changes this period." if none
 - [ ] `## Model Releases`
 - [ ] `## API & SDK Changes`

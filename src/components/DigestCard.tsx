@@ -5,6 +5,7 @@ import { useState } from 'react'
 import type { DigestMeta } from '@/lib/digests'
 
 const SECTION_COLORS: Record<string, string> = {
+  Repo: '#CA8A04',
   Models: '#4F46E5',
   API: '#059669',
   Research: '#B45309',

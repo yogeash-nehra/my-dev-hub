@@ -27,6 +27,7 @@ const TAG_STYLES: Record<string, { color: string; label: string }> = {
 }
 
 const SECTION_ACCENT: Record<string, string> = {
+  '🏆 Repo of the Day': '#CA8A04',
   'Breaking Changes': '#DC2626',
   'Model Releases': '#4F46E5',
   'API & SDK Changes': '#059669',
