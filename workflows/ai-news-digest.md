@@ -53,18 +53,27 @@ Include any strong Trends items scored ≥2.
 Act as the AI news agent (agents/ai-news-agent.md already loaded).
 Scan GitHub releases for repos listed in personal/sources/ai-dev-sources.md.
 
-Priority repos (check every scan):
-- vllm-project/vllm
-- ggml-org/llama.cpp
-- ollama/ollama
-- huggingface/transformers
-- unsloth/unsloth
-- BerriAI/litellm
-- langchain-ai/langchain
-- NVIDIA/TensorRT-LLM
+Priority repos — agent & Claude stack (check every scan). Do NOT scan low-level
+inference/serving/training repos (llama.cpp, vLLM, LiteLLM, transformers, etc.) — they
+are excluded in the sources file for being per-build noise.
+- anthropics/claude-code
+- openai/codex
+- google-gemini/gemini-cli
+- OpenHands/OpenHands
+- cline/cline
+- Aider-AI/aider
+- continuedev/continue
+- charmbracelet/crush
+- microsoft/vscode-copilot
 - anthropics/anthropic-sdk-python
-- openai/openai-python
-- run-llama/llama_index
+- anthropics/anthropic-sdk-typescript
+- e2b-dev/E2B
+- daytonaio/daytona
+- modal-labs/modal
+- modelcontextprotocol/modelcontextprotocol
+- modelcontextprotocol/servers
+- langchain-ai/langgraph
+- pydantic/pydantic-ai
 - microsoft/autogen
 - crewai-inc/crewAI
 - huggingface/smolagents

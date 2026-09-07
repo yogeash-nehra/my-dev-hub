@@ -14,11 +14,21 @@ changelogs.
 
 ## Your Mandate
 
+**Primary focus — the layer developers build on:** coding agents (Claude Code, Codex,
+Cline, Aider, gemini-cli, OpenHands, …), the **Claude** platform and SDKs, **sandboxes /
+agent runtimes** (E2B, Daytona, Modal), **MCP** (spec, servers, clients), and agent
+frameworks. Low-level inference/model-serving/training plumbing (llama.cpp, vLLM,
+LiteLLM, quantization, kernels) is **not** the focus — skip per-build releases from those
+unless they ship an agent-facing feature that matters to someone *using* AI, not serving it.
+
 Find and report on:
+- Coding-agent releases and changes — new capabilities, commands/hooks, MCP support, SDKs, benchmark movement (SWE-bench, etc.)
+- Claude platform & SDK changes — new endpoints, tool use, betas, breaking changes developers must act on
+- MCP developments — spec changes, notable new servers/clients, auth, ecosystem shifts
+- Sandbox / agent-runtime updates — how you execute agent-generated code safely and at scale
+- Agent-framework releases — orchestration patterns, tool integrations, breaking changes
 - Model releases and version updates (with actual capability changes and benchmark numbers)
-- API additions, deprecations, and breaking changes developers need to act on
-- New research papers with measurable results, real-world implications, and associated code
-- Tool releases and significant updates (inference engines, frameworks, SDKs)
+- New research papers with measurable results and code — prioritizing the applied-agent angle
 - Benchmark and leaderboard movements (new top performers, SOTA changes)
 - Official technical deep-dives from the teams building things
 - Emerging patterns, techniques, or discussions that are moving fast in the community
@@ -63,13 +73,15 @@ site:huggingface.co/blog after:{{CUTOFF_DATE}}
 site:groq.com/blog after:{{CUTOFF_DATE}}
 ```
 
-For GitHub releases:
+For GitHub releases (agent & Claude stack — prefer each repo's `releases.atom`):
 ```
-github.com/vllm-project/vllm releases after:{{CUTOFF_DATE}}
-github.com/ggml-org/llama.cpp releases after:{{CUTOFF_DATE}}
-github.com/ollama/ollama releases after:{{CUTOFF_DATE}}
-github.com/huggingface/transformers releases after:{{CUTOFF_DATE}}
-github.com/unsloth/unsloth releases after:{{CUTOFF_DATE}}
+github.com/anthropics/claude-code releases after:{{CUTOFF_DATE}}
+github.com/cline/cline releases after:{{CUTOFF_DATE}}
+github.com/Aider-AI/aider releases after:{{CUTOFF_DATE}}
+github.com/OpenHands/OpenHands releases after:{{CUTOFF_DATE}}
+github.com/modelcontextprotocol/servers releases after:{{CUTOFF_DATE}}
+github.com/e2b-dev/E2B releases after:{{CUTOFF_DATE}}
+github.com/langchain-ai/langgraph releases after:{{CUTOFF_DATE}}
 ```
 
 For research and benchmarks:
@@ -135,7 +147,7 @@ For **Trends & Emerging Tech** items:
 **Writing the fields:**
 - **What changed** — must cite the specific delta: "bumped from 200k to 1M context", "added MoE routing", "deprecated `v1/engines` endpoint"
 - **Developer signal** — be specific. Not "this is useful for RAG" but "update your `max_tokens` parameter — the old default of 4096 is now 8192; existing code that relied on the old default will behave differently"
-- **Affects you if** — write concrete conditions: "you are calling the completions API directly", "you are running llama.cpp on a Snapdragon device", "you have >200k tokens in your context window"
+- **Affects you if** — write concrete conditions: "you build MCP servers", "you run Claude Code with custom hooks", "you execute agent-generated code in an E2B/Daytona sandbox", "you have >200k tokens in your context window"
 - **Adoption effort** — one of three levels: **Quick** (just update a version, no code changes), **Moderate** (update code, re-test), **Significant** (architecture change, migration, breaking update)
 
 ---

@@ -88,41 +88,74 @@ directly. Prefer the `releases.atom` of each flagship GitHub repo.
 | Zhipu / Z.ai (GLM, formerly THUDM) | huggingface.co/zai-org | github.com/zai-org | GLM model releases, agentic/coding models |
 | Moonshot AI (Kimi) | huggingface.co/moonshotai | github.com/MoonshotAI | Kimi releases, long-context + agentic work |
 
-### GitHub Releases (check every scan)
-These repos ship fast — releases often contain real news before blog posts appear.
+### GitHub Releases — Agent & Claude Stack (check every scan)
+Focused on the layer developers actually build on: **coding agents, the Claude
+platform, sandboxes / agent runtimes, MCP, and agent frameworks.** Releases here
+often carry real news before any blog post.
 **Feed for any repo below:** `https://github.com/<owner>/<repo>/releases.atom`
 (also `/tags.atom`). Prefer these Atom feeds over scraping.
 
+> **Deliberately excluded — low-level LLM/inference plumbing.** Inference engines,
+> model-serving, quantization, and training infra (llama.cpp, vLLM, LiteLLM,
+> transformers, DeepSpeed, TensorRT-LLM, unsloth, mlc-llm, guidance, diffusers,
+> PyTorch, ollama, llama_index, openai-python) were **removed** — they ship many
+> per-build releases with little application-developer signal and were drowning the
+> digest. Re-add one only if it starts shipping agent-facing features that matter to
+> someone *using* AI rather than *serving* models.
+
+**Coding agents**
 | Repo | What changes matter |
 |------|-------------------|
-| huggingface/transformers | New model architectures, tokenizer updates, pipeline changes |
-| vllm-project/vllm | Inference performance, new model support, quantization |
-| ollama/ollama | Local model support, performance, new model pull support |
-| ggml-org/llama.cpp | Quantization, hardware support (Snapdragon, Apple Silicon, CUDA), speed |
-| langchain-ai/langchain | New integrations, breaking changes, new chain types |
-| run-llama/llama_index | Retrieval improvements, new connectors, agentic features |
-| BerriAI/litellm | New model support, routing, proxy features |
-| openai/openai-python | API client changes, new endpoints |
-| anthropics/anthropic-sdk-python | Claude SDK changes, new features |
-| microsoft/DeepSpeed | Training optimization, ZeRO stages, inference speed |
-| unsloth/unsloth | Fine-tuning efficiency improvements, new model support |
-| NVIDIA/TensorRT-LLM | Enterprise inference, new GPU support, quantization |
-| mlc-ai/mlc-llm | On-device inference, WebLLM, mobile support |
-| guidance-ai/guidance | Structured generation, constrained decoding |
-| microsoft/vscode-copilot | IDE AI features |
-| huggingface/diffusers | Image/video generation models, LoRA updates |
-| pytorch/pytorch | Core ML framework releases |
-| modal-labs/modal | GPU cloud deployment, serverless AI |
-| microsoft/autogen | Multi-agent framework releases, new agent patterns |
-| crewai-inc/crewAI | Agentic workflow releases, new tool integrations |
-| huggingface/smolagents | Lightweight agent framework releases, new model support |
-| agno-agi/agno | Agentic framework releases, memory/tooling additions |
+| anthropics/claude-code | Claude Code releases — new commands, hooks, subagents, MCP, SDK, permissions |
+| openai/codex | Codex CLI agent — features, sandboxing model, config |
+| google-gemini/gemini-cli | Gemini CLI agent — MCP client/server support, extensions, tooling |
+| OpenHands/OpenHands | Autonomous SWE agent — new capabilities, SWE-bench movement |
+| cline/cline | Autonomous coding agent (IDE / CLI / SDK) — plan/act, MCP, model support |
+| Aider-AI/aider | Terminal AI pair programming — edit formats, new models, benchmark results |
+| continuedev/continue | Open-source coding agent — config, hub, model integrations |
+| charmbracelet/crush | Terminal agentic coding — providers, MCP, UX |
+| microsoft/vscode-copilot | VS Code Copilot / coding-agent features |
+
+**Claude & SDKs**
+| Repo | What changes matter |
+|------|-------------------|
+| anthropics/anthropic-sdk-python | Claude SDK (Python) — new endpoints, tool use, streaming, betas |
+| anthropics/anthropic-sdk-typescript | Claude SDK (TypeScript) — new endpoints, tool use, streaming, betas |
+
+*(Claude model & API changes themselves come from Anthropic News + Platform Release
+Notes in Tier 1 above; `anthropics/claude-code` releases are the Claude Code changelog.)*
+
+**Sandboxes & agent runtimes**
+| Repo | What changes matter |
+|------|-------------------|
+| e2b-dev/E2B | Secure sandboxes for AI-generated code / agent tool execution — SDK, runtimes |
+| daytonaio/daytona | Elastic infra for running AI-generated code (AI sandboxes) — API, runtimes |
+| modal-labs/modal | Serverless GPU/compute + Sandboxes API for agents |
+
+**MCP (Model Context Protocol)**
+| Repo | What changes matter |
+|------|-------------------|
+| modelcontextprotocol/modelcontextprotocol | The MCP spec + docs — protocol changes, new capabilities, auth |
+| modelcontextprotocol/servers | Reference MCP servers — new servers, breaking changes |
+| punkpeye/awesome-mcp-servers | Community MCP server catalog — notable new servers |
+
+**Agent frameworks**
+| Repo | What changes matter |
+|------|-------------------|
+| langchain-ai/langgraph | Agent orchestration — graph/runtime features, breaking changes |
+| pydantic/pydantic-ai | Typed Python agent framework — model support, tooling, durable execution |
+| microsoft/autogen | Multi-agent framework — new patterns |
+| crewai-inc/crewAI | Agentic workflows — tools, integrations |
+| huggingface/smolagents | Lightweight agents — model support |
+| agno-agi/agno | Agent framework — memory/tooling additions |
 
 ### arXiv (cs.AI, cs.CL, cs.LG, cs.CV — new submissions daily)
 Feeds: `http://export.arxiv.org/rss/cs.AI`, `/cs.CL`, `/cs.LG`, `/cs.CV`.
 Filter for papers that:
-- Introduce a new model, benchmark, or training technique
-- Show measurable performance improvements with numbers
+- **Prioritize the applied-agent angle:** agentic systems, coding agents, tool use /
+  function calling, MCP, sandboxed code execution, agent evals — over pure
+  pretraining, quantization, or kernel-level work
+- Introduce a new model, benchmark, or technique with measurable numbers
 - Are from recognized labs (DeepMind, Meta FAIR, CMU, Stanford, MIT, AI2, Mila, ETH, Oxford)
 - Have an associated GitHub repo or released weights
 
