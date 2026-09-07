@@ -38,15 +38,22 @@ GitHub Changelog
 **Open-weights labs:** DeepSeek · Alibaba Qwen · Zhipu / Z.ai (GLM) · Moonshot AI (Kimi)
 — watched via their Hugging Face orgs and GitHub `releases.atom`.
 
-### Tier 1 — GitHub Releases (every scan)
+### Tier 1 — GitHub Releases: Agent & Claude Stack (every scan)
 
-`huggingface/transformers` · `vllm-project/vllm` · `ollama/ollama` ·
-`ggml-org/llama.cpp` · `langchain-ai/langchain` · `run-llama/llama_index` ·
-`BerriAI/litellm` · `openai/openai-python` · `anthropics/anthropic-sdk-python` ·
-`microsoft/DeepSpeed` · `unsloth/unsloth` · `NVIDIA/TensorRT-LLM` ·
-`mlc-ai/mlc-llm` · `guidance-ai/guidance` · `microsoft/vscode-copilot` ·
-`huggingface/diffusers` · `pytorch/pytorch` · `modal-labs/modal` ·
-`microsoft/autogen` · `crewai-inc/crewAI` · `huggingface/smolagents` · `agno-agi/agno`
+Focused on the layer developers build on — coding agents, Claude, sandboxes, MCP,
+and agent frameworks. Low-level inference/serving/training plumbing (llama.cpp, vLLM,
+LiteLLM, transformers, DeepSpeed, TensorRT-LLM, …) is deliberately **excluded** — too
+many per-build releases, little application-developer signal.
+
+- **Coding agents:** `anthropics/claude-code` · `openai/codex` · `google-gemini/gemini-cli` ·
+  `OpenHands/OpenHands` · `cline/cline` · `Aider-AI/aider` · `continuedev/continue` ·
+  `charmbracelet/crush` · `microsoft/vscode-copilot`
+- **Claude & SDKs:** `anthropics/anthropic-sdk-python` · `anthropics/anthropic-sdk-typescript`
+- **Sandboxes & runtimes:** `e2b-dev/E2B` · `daytonaio/daytona` · `modal-labs/modal`
+- **MCP:** `modelcontextprotocol/modelcontextprotocol` · `modelcontextprotocol/servers` ·
+  `punkpeye/awesome-mcp-servers`
+- **Agent frameworks:** `langchain-ai/langgraph` · `pydantic/pydantic-ai` ·
+  `microsoft/autogen` · `crewai-inc/crewAI` · `huggingface/smolagents` · `agno-agi/agno`
 
 ### Tier 1 — Research
 
